@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard } from "lucide-react";
 
-import cybrainLogo from "@/assets/cybrain-logo.jpg.asset.json";
+import csmLogo from "@/assets/csm-logo.png.asset.json";
 
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -85,16 +85,16 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border">
         <div className="px-2 py-1 group-data-[collapsible=icon]:hidden">
           <img
-            src={cybrainLogo.url}
-            alt="Cybrain Software Solutions logo"
-            className="h-5 w-auto rounded-sm bg-background/95 px-1 py-0.5"
+            src={csmLogo.url}
+            alt="Cyber School Manager logo"
+            className="h-8 w-auto"
             loading="lazy"
           />
           <p className="mt-2 text-[11px] leading-tight text-sidebar-foreground/60">
             &copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved.
           </p>
           <p className="mt-1 text-[11px] leading-tight text-sidebar-foreground/45">
-            Prototype build — modules ship in later phases.
+            Cyber School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
           </p>
         </div>
       </SidebarFooter>
