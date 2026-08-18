@@ -82,7 +82,12 @@ export function AppSidebar() {
                       className="group/collapsible"
                     >
                       <SidebarMenuItem>
-                        <SidebarMenuButton asChild isActive={active} tooltip={item.name}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={active}
+                          tooltip={item.name}
+                          className={active ? "nav-glow" : undefined}
+                        >
                           <Link to={item.route as "/dashboard"}>
                             <Icon />
                             <span>{item.name}</span>
