@@ -25,8 +25,18 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-2.5 px-1 py-1.5">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-sidebar-primary font-display text-base font-bold text-sidebar-primary-foreground">
-            {school?.code?.slice(0, 2).toUpperCase() ?? "CS"}
+          <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sidebar-primary">
+            {school?.logo_url ? (
+              <img
+                src={school.logo_url}
+                alt={school?.name ?? "School logo"}
+                className="size-full object-cover"
+              />
+            ) : (
+              <span className="font-display text-base font-bold text-sidebar-primary-foreground">
+                {school?.code?.slice(0, 2).toUpperCase() ?? "CS"}
+              </span>
+            )}
           </div>
           <div className="grid min-w-0 group-data-[collapsible=icon]:hidden">
             <span className="truncate font-display text-sm font-semibold text-sidebar-accent-foreground">
