@@ -7,6 +7,7 @@ import {
   Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
+import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { useWorkspace } from "@/components/shell/workspace";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDashboard } from "@/lib/erp.functions";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
