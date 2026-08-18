@@ -235,14 +235,12 @@ function AuthPage() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="password-up">Password</Label>
-                    <Input
+                    <PasswordInput
                       id="password-up"
-                      type="password"
+                      value={password}
+                      onChange={setPassword}
                       autoComplete="new-password"
                       minLength={8}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={busy}>
