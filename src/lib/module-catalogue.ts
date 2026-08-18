@@ -38,6 +38,8 @@ export const MODULE_CATALOGUE: ModuleDef[] = [
     pages: [
       { area: "setup", label: "Interest Level", pageKey: "frmEnquiryInterestLevel" },
       { area: "setup", label: "Followup Status", pageKey: "frmEnquiryFollowup" },
+      { area: "transaction", label: "Add Enquiry", pageKey: "frmAddEnquiry" },
+      { area: "transaction", label: "Manage Enquiry", pageKey: "frmManageEnquiry" },
       { area: "report", label: "Enquiry Dashboard", pageKey: "frmEnquiryDashBoard" },
       { area: "report", label: "Enquiry Report", pageKey: "frmReportEnquiry" },
       { area: "report", label: "Month Wise Report", pageKey: "frmReportEnquiryMonthWise" },
@@ -69,9 +71,7 @@ export const MODULE_CATALOGUE: ModuleDef[] = [
       { area: "setup", label: "Student Type Category", pageKey: "frmstudentTypeCategorymaster" },
       { area: "setup", label: "Student Type Master", pageKey: "frmstudenttype" },
       { area: "setup", label: "Nationality Master", pageKey: "frmnationalitymaster" },
-      { area: "transaction", label: "Add Enquiry", pageKey: "frmAddEnquiry" },
       { area: "transaction", label: "Assign Concession Type", pageKey: "AssignConcessionType" },
-      { area: "transaction", label: "Manage Enquiry", pageKey: "frmManageEnquiry" },
       { area: "transaction", label: "Student Registration", pageKey: "frmstudentregistration" },
       { area: "transaction", label: "Student Admission", pageKey: "frmstudentadmission" },
       { area: "transaction", label: "Student Update", pageKey: "frmStudentUpdateNew" },
