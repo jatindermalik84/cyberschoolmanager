@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
+import cybrainLogo from "@/assets/cybrain-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -126,9 +127,20 @@ function AuthPage() {
           </ul>
         </div>
 
-        <p className="relative text-xs text-sidebar-foreground/50">
-          Phase 1 prototype · modules roll out in later phases
-        </p>
+        <div className="relative space-y-3">
+          <img
+            src={cybrainLogo.url}
+            alt="Cybrain Software Solutions logo"
+            className="h-7 w-auto rounded-sm bg-background px-2 py-1"
+          />
+          <p className="text-xs text-sidebar-foreground/50">
+            Phase 1 prototype · modules roll out in later phases
+          </p>
+          <p className="text-xs text-sidebar-foreground/50">
+            &copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved.
+            Cyber School Manager and the Cybrain logo are trademarks of Cybrain Software Solutions.
+          </p>
+        </div>
       </aside>
 
       <main className="flex items-center justify-center bg-background p-6">
@@ -247,6 +259,10 @@ function AuthPage() {
             </Tabs>
           </CardContent>
         </Card>
+      </main>
+    </div>
+  );
+}
       </main>
     </div>
   );
