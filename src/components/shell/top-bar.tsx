@@ -2,6 +2,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, User } from "lucide-react";
 
+import csmLogo from "@/assets/csm-logo.png.asset.json";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { useWorkspace } from "./workspace";
+
 
 export function TopBar() {
   const { schools, school, setSchoolId, sessions, session, setSessionId, profile, roleLabel } =
