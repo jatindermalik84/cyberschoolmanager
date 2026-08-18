@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { GraduationCap, Loader2, Mail } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
