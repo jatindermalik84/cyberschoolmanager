@@ -125,7 +125,7 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         {groups.map(({ area, pages }) => {
           const AreaIcon = AREA_ICON[area];
           return (
-            <Card key={area} className="min-w-0">
+            <Card key={area} id={area} className="min-w-0 scroll-mt-20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <AreaIcon className="size-4 text-muted-foreground" />
