@@ -40,6 +40,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedSettingsSchoolRouteImport } from './routes/_authenticated/settings/school'
 import { Route as AuthenticatedSettingsSessionsRouteImport } from './routes/_authenticated/settings/sessions'
 import { Route as AuthenticatedSettingsUsersRouteImport } from './routes/_authenticated/settings/users'
+import { Route as AuthenticatedMModulePageRouteImport } from './routes/_authenticated/m.$module.$page'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -204,6 +205,12 @@ const AuthenticatedSettingsUsersRoute =
     path: '/settings/users',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMModulePageRoute =
+  AuthenticatedMModulePageRouteImport.update({
+    id: '/m/$module/$page',
+    path: '/m/$module/$page',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
   '/settings/users': typeof AuthenticatedSettingsUsersRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -268,6 +276,7 @@ export interface FileRoutesByTo {
   '/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
   '/settings/users': typeof AuthenticatedSettingsUsersRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -302,6 +311,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
   '/_authenticated/settings/users': typeof AuthenticatedSettingsUsersRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/settings/sessions'
     | '/settings/users'
     | '/settings/'
+    | '/m/$module/$page'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -368,6 +379,7 @@ export interface FileRouteTypes {
     | '/settings/sessions'
     | '/settings/users'
     | '/settings'
+    | '/m/$module/$page'
   id:
     | '__root__'
     | '/'
@@ -401,6 +413,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/sessions'
     | '/_authenticated/settings/users'
     | '/_authenticated/settings/'
+    | '/_authenticated/m/$module/$page'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -629,6 +642,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/m/$module/$page': {
+      id: '/_authenticated/m/$module/$page'
+      path: '/m/$module/$page'
+      fullPath: '/m/$module/$page'
+      preLoaderRoute: typeof AuthenticatedMModulePageRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -660,6 +680,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsSessionsRoute: typeof AuthenticatedSettingsSessionsRoute
   AuthenticatedSettingsUsersRoute: typeof AuthenticatedSettingsUsersRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
+  AuthenticatedMModulePageRoute: typeof AuthenticatedMModulePageRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -690,6 +711,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsSessionsRoute: AuthenticatedSettingsSessionsRoute,
   AuthenticatedSettingsUsersRoute: AuthenticatedSettingsUsersRoute,
   AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
+  AuthenticatedMModulePageRoute: AuthenticatedMModulePageRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
