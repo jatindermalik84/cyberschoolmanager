@@ -259,6 +259,24 @@ function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <footer className="border-t pt-5">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <img
+            src={csmLogo.url}
+            alt="Cyber School Manager logo"
+            className="h-8 w-auto"
+            loading="lazy"
+          />
+          <div className="text-[11px] leading-tight text-muted-foreground">
+            <p>&copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved.</p>
+            <p className="mt-1">
+              Cyber School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
+
