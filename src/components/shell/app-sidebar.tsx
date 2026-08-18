@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-import { AREA_LABELS, type ModuleArea } from "@/lib/module-catalogue";
+import { type ModuleArea } from "@/lib/module-catalogue";
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
@@ -35,7 +35,6 @@ export function AppSidebar() {
         pathname.startsWith(`${m.route}/`) ||
         pathname.startsWith(`/m/${m.key}/`),
     ) ?? null;
-  void AREA_LABELS;
 
   return (
     <Sidebar collapsible="icon">
