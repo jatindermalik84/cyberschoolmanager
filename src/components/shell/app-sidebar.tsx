@@ -170,14 +170,16 @@ export function AppSidebar() {
             </div>
 
             {AREA_ORDER.map((area) => {
-              const pages = activeModule.pages.filter(
-                (p) => p.area === area && matchesQuery(p.label, query),
-              );
+              const pages = areaPages[area] ?? [];
               if (pages.length === 0) return null;
-              const hasActivePage = pages.some((p) => activeModulePageKey === p.pageKey);
-              const shouldOpen = query.trim().length > 0 || hasActivePage;
               return (
-                <Collapsible key={area} defaultOpen={shouldOpen}>
+                <Collapsible
+                  key={area}
+                  open={isSearching ? true : openAreas[area]}
+                  onOpenChange={(open) =>
+                    setOpenAreas((prev) => ({ ...prev, [area]: open }))
+                  }
+                >
                   <SidebarGroup className="p-0">
                     <SidebarGroupLabel asChild>
                       <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
