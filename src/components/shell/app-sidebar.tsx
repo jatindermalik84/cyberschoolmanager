@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
 
@@ -11,7 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-import { type ModuleArea } from "@/lib/module-catalogue";
+import { type ModuleArea, type ModulePage } from "@/lib/module-catalogue";
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
