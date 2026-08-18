@@ -1,13 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronRight, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
-  SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarRail,
+  SidebarRail,
 } from "@/components/ui/sidebar";
-import { AREA_LABELS, pagesByArea } from "@/lib/module-catalogue";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 
@@ -71,55 +69,22 @@ export function AppSidebar() {
               <SidebarMenu>
                 {items.map((item) => {
                   const Icon = iconFor(item.icon);
-                  const areas = pagesByArea(item);
                   const active = pathname === item.route || pathname.startsWith(`/m/${item.key}/`);
 
                   return (
-                    <Collapsible
-                      key={item.key}
-                      asChild
-                      defaultOpen={active}
-                      className="group/collapsible"
-                    >
-                      <SidebarMenuItem>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={active}
-                          tooltip={item.name}
-                          className={active ? "nav-glow" : undefined}
-                        >
-                          <Link to={item.route as "/dashboard"}>
-                            <Icon />
-                            <span>{item.name}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                        <CollapsibleTrigger asChild>
-                          <button
-                            type="button"
-                            aria-label={`Toggle ${item.name} sections`}
-                            className="absolute right-1 top-1.5 flex size-5 items-center justify-center rounded-sm text-sidebar-foreground/60 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden"
-                          >
-                            <ChevronRight className="size-3.5 transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                          </button>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {areas.map(({ area, pages }) => (
-                              <SidebarMenuSubItem key={area}>
-                                <SidebarMenuSubButton asChild>
-                                  <Link to={item.route as "/dashboard"} hash={area}>
-                                    <span>{AREA_LABELS[area]}</span>
-                                    <span className="tnum ml-auto text-xs text-sidebar-foreground/50">
-                                      {pages.length}
-                                    </span>
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </SidebarMenuItem>
-                    </Collapsible>
+                    <SidebarMenuItem key={item.key}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        tooltip={item.name}
+                        className={active ? "nav-glow" : undefined}
+                      >
+                        <Link to={item.route as "/dashboard"}>
+                          <Icon />
+                          <span>{item.name}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
                   );
                 })}
               </SidebarMenu>
