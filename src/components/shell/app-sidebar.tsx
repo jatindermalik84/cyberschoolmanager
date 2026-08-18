@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, ChevronRight, LayoutDashboard } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 import { type ModuleArea } from "@/lib/module-catalogue";
