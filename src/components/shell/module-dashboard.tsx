@@ -1,23 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowRight } from "lucide-react";
 import {
-  ArrowRight, FileBarChart2, LayoutList, Sliders, Wrench,
-} from "lucide-react";
+  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from "recharts";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { getDashboard } from "@/lib/erp.functions";
-import { MODULE_BY_KEY, type ModuleArea } from "@/lib/module-catalogue";
+import { MODULE_BY_KEY } from "@/lib/module-catalogue";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-
-const AREA_META: Record<ModuleArea, { title: string; caption: string; icon: typeof Wrench }> = {
-  transaction: { title: "Daily operations", caption: "Day-to-day entry screens", icon: LayoutList },
-  setup: { title: "Configuration", caption: "Masters this module runs on", icon: Sliders },
-  report: { title: "Insights & reports", caption: "Printable and analytical outputs", icon: FileBarChart2 },
-};
-
-const RAIL_ORDER: ModuleArea[] = ["transaction", "setup", "report"];
 
 const inr = (n: number) =>
   n >= 10000000 ? `₹${(n / 10000000).toFixed(2)} Cr`
@@ -80,6 +73,24 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
   })();
 
   const primaryAction = mod.pages.find((p) => p.area === "transaction") ?? mod.pages[0];
+
+  const feeChart = (data?.fees ?? []).map((f) => ({
+    label: new Date(f.month_start as string).toLocaleDateString("en-IN", { month: "short" }),
+    collected: Number(f.collected_amount),
+    demand: Number(f.demand_amount),
+  }));
+  const classChart = (data?.classes ?? []).map((c) => ({
+    label: `${c.name}${c.section ? `-${c.section}` : ""}`,
+    strength: c.strength ?? 0,
+  }));
+  const attChart = [...(data?.attendance ?? [])].reverse().map((a) => ({
+    label: new Date(a.attendance_date as string).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }),
+    present: a.present_count ?? 0,
+    absent: a.absent_count ?? 0,
+  }));
+
+  const isFee = mod.key === "fee" || mod.key === "accounts" || mod.key === "payroll";
+  const isAtt = mod.key === "attendance";
 
   return (
     <div className="min-h-full space-y-7">
@@ -149,66 +160,72 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
       )}
 
       <div className="grid items-start gap-5 lg:grid-cols-12">
-        {RAIL_ORDER.map((area, idx) => {
-          const pages = mod.pages.filter((p) => p.area === area);
-          if (pages.length === 0) return null;
-          const meta = AREA_META[area];
-          const AreaIcon = meta.icon;
-          const wide = idx === 0 || area === "report";
-          const shown = pages.slice(0, wide ? 9 : 6);
-
-          return (
-            <section
-              key={area}
-              id={area}
-              className={cn(
-                "min-w-0 scroll-mt-20 overflow-hidden rounded-2xl border bg-card",
-                wide ? "lg:col-span-8" : "lg:col-span-4",
-                area === "report" && "lg:col-span-12",
-              )}
-            >
-              <header className="flex items-center justify-between gap-3 border-b px-6 py-4">
-                <h2 className="flex items-center gap-2.5 font-display text-base font-semibold">
-                  <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <AreaIcon className="size-4" />
-                  </span>
-                  {meta.title}
-                </h2>
-                <span className="tnum rounded-md bg-primary/8 px-2 py-1 text-xs font-bold text-primary">
-                  {pages.length}
-                </span>
-              </header>
-              <p className="px-6 pt-4 text-xs text-muted-foreground">{meta.caption}</p>
-              <div
-                className={cn(
-                  "grid gap-x-8 gap-y-1 p-6 pt-3",
-                  wide ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-1",
-                  area === "report" && "sm:grid-cols-2 lg:grid-cols-4",
+        <section className="min-w-0 overflow-hidden rounded-2xl border bg-card lg:col-span-8">
+          <header className="border-b px-6 py-4">
+            <h2 className="font-display text-base font-semibold">
+              {isFee ? "Collection against demand" : isAtt ? "Attendance trend" : "Strength by class"}
+            </h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {isFee ? "Monthly billing performance" : isAtt ? "Last five marked days" : "Live section-wise distribution"}
+            </p>
+          </header>
+          <div className="h-72 p-4">
+            {isPending ? (
+              <Skeleton className="size-full rounded-xl" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                {isAtt ? (
+                  <AreaChart data={attChart} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                    <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={11} />
+                    <YAxis tickLine={false} axisLine={false} fontSize={11} width={38} />
+                    <Tooltip cursor={{ fill: "var(--color-muted)" }} />
+                    <Area type="monotone" dataKey="present" stroke="var(--color-primary)" fill="var(--color-primary)" fillOpacity={0.15} />
+                    <Area type="monotone" dataKey="absent" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.15} />
+                  </AreaChart>
+                ) : (
+                  <BarChart data={isFee ? feeChart : classChart} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                    <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={11} />
+                    <YAxis tickLine={false} axisLine={false} fontSize={11} width={44} />
+                    <Tooltip cursor={{ fill: "var(--color-muted)" }} />
+                    <Bar dataKey={isFee ? "collected" : "strength"} radius={[6, 6, 0, 0]}>
+                      {(isFee ? feeChart : classChart).map((_, i) => (
+                        <Cell key={i} fill={i % 2 ? "var(--color-accent)" : "var(--color-primary)"} />
+                      ))}
+                    </Bar>
+                  </BarChart>
                 )}
-              >
-                {shown.map((p) => (
-                  <Link
-                    key={p.pageKey}
-                    to="/m/$module/$page"
-                    params={{ module: mod.key, page: p.pageKey }}
-                    className="group flex items-center gap-2 rounded-lg py-1.5 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
-                  >
-                    <span className="size-1.5 shrink-0 rounded-full bg-border transition-colors group-hover:bg-primary" />
-                    <span className="truncate">{p.label}</span>
-                  </Link>
-                ))}
-              </div>
-              {pages.length > shown.length ? (
-                <div className="border-t bg-muted/40 px-6 py-3">
-                  <p className="text-xs font-semibold text-muted-foreground">
-                    {pages.length - shown.length} more screens
-                  </p>
-                </div>
-              ) : null}
-            </section>
-          );
-        })}
+              </ResponsiveContainer>
+            )}
+          </div>
+        </section>
+
+        <section className="min-w-0 overflow-hidden rounded-2xl border bg-card lg:col-span-4">
+          <header className="border-b px-6 py-4">
+            <h2 className="font-display text-base font-semibold">Recent activity</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">Latest changes across the school</p>
+          </header>
+          <ul className="divide-y">
+            {(data?.activity ?? []).slice(0, 5).map((a) => (
+              <li key={a.id} className="px-6 py-3.5">
+                <p className="truncate text-sm font-medium">{a.action}</p>
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                  {a.actor_name} · {a.entity}
+                </p>
+              </li>
+            ))}
+            {!isPending && (data?.activity?.length ?? 0) === 0 ? (
+              <li className="px-6 py-8 text-center text-sm text-muted-foreground">No activity yet.</li>
+            ) : null}
+          </ul>
+        </section>
       </div>
+
+      <p className="text-xs text-muted-foreground">
+        All {mod.pages.length} {mod.name} screens are in the sidebar, grouped by daily operations,
+        configuration and reports.
+      </p>
     </div>
   );
 }
