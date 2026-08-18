@@ -98,6 +98,7 @@ function DashboardPage() {
   }));
 
   const maxStrength = Math.max(1, ...data.classes.map((c) => c.strength ?? 0));
+  const onRoll = data.classes.reduce((sum, c) => sum + (c.strength ?? 0), 0);
 
   return (
     <div className="space-y-6">
@@ -120,9 +121,9 @@ function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           icon={GraduationCap}
-          label="Active students"
-          value={data.studentCount.toLocaleString("en-IN")}
-          hint={`${data.classes.length} classes on roll`}
+          label="Students on roll"
+          value={onRoll.toLocaleString("en-IN")}
+          hint={`${data.classes.length} class sections · ${data.studentCount} detailed records`}
         />
         <KpiCard
           icon={Users}
