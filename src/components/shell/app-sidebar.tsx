@@ -66,7 +66,7 @@ export function AppSidebar() {
                         isActive={pathname === item.route}
                         tooltip={item.name}
                       >
-                        <Link to={item.route}>
+                        <Link to={item.route as "/dashboard"}>
                           <Icon />
                           <span>{item.name}</span>
                         </Link>
