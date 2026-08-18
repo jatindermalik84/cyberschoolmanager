@@ -197,13 +197,11 @@ function AuthPage() {
                         Forgot password?
                       </button>
                     </div>
-                    <Input
+                    <PasswordInput
                       id="password"
-                      type="password"
-                      autoComplete="current-password"
-                      required
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={setPassword}
+                      autoComplete="current-password"
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={busy}>
