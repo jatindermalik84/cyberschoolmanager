@@ -16,21 +16,28 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAccountsRouteImport } from './routes/_authenticated/accounts'
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
+import { Route as AuthenticatedClassesRouteImport } from './routes/_authenticated/classes'
 import { Route as AuthenticatedCommunicationRouteImport } from './routes/_authenticated/communication'
+import { Route as AuthenticatedCompetitionRouteImport } from './routes/_authenticated/competition'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEnquiryRouteImport } from './routes/_authenticated/enquiry'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedExaminationsRouteImport } from './routes/_authenticated/examinations'
 import { Route as AuthenticatedFeeRouteImport } from './routes/_authenticated/fee'
 import { Route as AuthenticatedHostelRouteImport } from './routes/_authenticated/hostel'
+import { Route as AuthenticatedHrRouteImport } from './routes/_authenticated/hr'
+import { Route as AuthenticatedInterviewsRouteImport } from './routes/_authenticated/interviews'
 import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
+import { Route as AuthenticatedMedicalRouteImport } from './routes/_authenticated/medical'
 import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
+import { Route as AuthenticatedSecuritiesRouteImport } from './routes/_authenticated/securities'
 import { Route as AuthenticatedStudentsRouteImport } from './routes/_authenticated/students'
 import { Route as AuthenticatedTeacherDiaryRouteImport } from './routes/_authenticated/teacher-diary'
 import { Route as AuthenticatedTimetableRouteImport } from './routes/_authenticated/timetable'
 import { Route as AuthenticatedTransportRouteImport } from './routes/_authenticated/transport'
-import { Route as AuthenticatedSettingsSchoolRouteImport } from './routes/_authenticated/settings/school'
-import { Route as AuthenticatedSettingsSessionsRouteImport } from './routes/_authenticated/settings/sessions'
-import { Route as AuthenticatedSettingsUsersRouteImport } from './routes/_authenticated/settings/users'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedMModulePageRouteImport } from './routes/_authenticated/m.$module.$page'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -67,15 +74,36 @@ const AuthenticatedCertificatesRoute =
     path: '/certificates',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedClassesRoute = AuthenticatedClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCommunicationRoute =
   AuthenticatedCommunicationRouteImport.update({
     id: '/communication',
     path: '/communication',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCompetitionRoute =
+  AuthenticatedCompetitionRouteImport.update({
+    id: '/competition',
+    path: '/competition',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEnquiryRoute = AuthenticatedEnquiryRouteImport.update({
+  id: '/enquiry',
+  path: '/enquiry',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedExaminationsRoute =
@@ -94,6 +122,16 @@ const AuthenticatedHostelRoute = AuthenticatedHostelRouteImport.update({
   path: '/hostel',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedHrRoute = AuthenticatedHrRouteImport.update({
+  id: '/hr',
+  path: '/hr',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInterviewsRoute = AuthenticatedInterviewsRouteImport.update({
+  id: '/interviews',
+  path: '/interviews',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedInventoryRoute = AuthenticatedInventoryRouteImport.update({
   id: '/inventory',
   path: '/inventory',
@@ -104,9 +142,19 @@ const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMedicalRoute = AuthenticatedMedicalRouteImport.update({
+  id: '/medical',
+  path: '/medical',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
   id: '/payroll',
   path: '/payroll',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSecuritiesRoute = AuthenticatedSecuritiesRouteImport.update({
+  id: '/securities',
+  path: '/securities',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedStudentsRoute = AuthenticatedStudentsRouteImport.update({
@@ -130,22 +178,16 @@ const AuthenticatedTransportRoute = AuthenticatedTransportRouteImport.update({
   path: '/transport',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedSettingsSchoolRoute =
-  AuthenticatedSettingsSchoolRouteImport.update({
-    id: '/settings/school',
-    path: '/settings/school',
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedSettingsSessionsRoute =
-  AuthenticatedSettingsSessionsRouteImport.update({
-    id: '/settings/sessions',
-    path: '/settings/sessions',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSettingsUsersRoute =
-  AuthenticatedSettingsUsersRouteImport.update({
-    id: '/settings/users',
-    path: '/settings/users',
+const AuthenticatedMModulePageRoute =
+  AuthenticatedMModulePageRouteImport.update({
+    id: '/m/$module/$page',
+    path: '/m/$module/$page',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -156,21 +198,28 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AuthenticatedAccountsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
+  '/classes': typeof AuthenticatedClassesRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/competition': typeof AuthenticatedCompetitionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/enquiry': typeof AuthenticatedEnquiryRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/examinations': typeof AuthenticatedExaminationsRoute
   '/fee': typeof AuthenticatedFeeRoute
   '/hostel': typeof AuthenticatedHostelRoute
+  '/hr': typeof AuthenticatedHrRoute
+  '/interviews': typeof AuthenticatedInterviewsRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/medical': typeof AuthenticatedMedicalRoute
   '/payroll': typeof AuthenticatedPayrollRoute
+  '/securities': typeof AuthenticatedSecuritiesRoute
   '/students': typeof AuthenticatedStudentsRoute
   '/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
-  '/settings/school': typeof AuthenticatedSettingsSchoolRoute
-  '/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
-  '/settings/users': typeof AuthenticatedSettingsUsersRoute
+  '/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -179,21 +228,28 @@ export interface FileRoutesByTo {
   '/accounts': typeof AuthenticatedAccountsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
+  '/classes': typeof AuthenticatedClassesRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/competition': typeof AuthenticatedCompetitionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/enquiry': typeof AuthenticatedEnquiryRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/examinations': typeof AuthenticatedExaminationsRoute
   '/fee': typeof AuthenticatedFeeRoute
   '/hostel': typeof AuthenticatedHostelRoute
+  '/hr': typeof AuthenticatedHrRoute
+  '/interviews': typeof AuthenticatedInterviewsRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/medical': typeof AuthenticatedMedicalRoute
   '/payroll': typeof AuthenticatedPayrollRoute
+  '/securities': typeof AuthenticatedSecuritiesRoute
   '/students': typeof AuthenticatedStudentsRoute
   '/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
-  '/settings/school': typeof AuthenticatedSettingsSchoolRoute
-  '/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
-  '/settings/users': typeof AuthenticatedSettingsUsersRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -204,21 +260,28 @@ export interface FileRoutesById {
   '/_authenticated/accounts': typeof AuthenticatedAccountsRoute
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
+  '/_authenticated/classes': typeof AuthenticatedClassesRoute
   '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
+  '/_authenticated/competition': typeof AuthenticatedCompetitionRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/enquiry': typeof AuthenticatedEnquiryRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/examinations': typeof AuthenticatedExaminationsRoute
   '/_authenticated/fee': typeof AuthenticatedFeeRoute
   '/_authenticated/hostel': typeof AuthenticatedHostelRoute
+  '/_authenticated/hr': typeof AuthenticatedHrRoute
+  '/_authenticated/interviews': typeof AuthenticatedInterviewsRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/medical': typeof AuthenticatedMedicalRoute
   '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
+  '/_authenticated/securities': typeof AuthenticatedSecuritiesRoute
   '/_authenticated/students': typeof AuthenticatedStudentsRoute
   '/_authenticated/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/_authenticated/timetable': typeof AuthenticatedTimetableRoute
   '/_authenticated/transport': typeof AuthenticatedTransportRoute
-  '/_authenticated/settings/school': typeof AuthenticatedSettingsSchoolRoute
-  '/_authenticated/settings/sessions': typeof AuthenticatedSettingsSessionsRoute
-  '/_authenticated/settings/users': typeof AuthenticatedSettingsUsersRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -229,21 +292,28 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/attendance'
     | '/certificates'
+    | '/classes'
     | '/communication'
+    | '/competition'
     | '/dashboard'
+    | '/enquiry'
+    | '/events'
     | '/examinations'
     | '/fee'
     | '/hostel'
+    | '/hr'
+    | '/interviews'
     | '/inventory'
     | '/library'
+    | '/medical'
     | '/payroll'
+    | '/securities'
     | '/students'
     | '/teacher-diary'
     | '/timetable'
     | '/transport'
-    | '/settings/school'
-    | '/settings/sessions'
-    | '/settings/users'
+    | '/settings/'
+    | '/m/$module/$page'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -252,21 +322,28 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/attendance'
     | '/certificates'
+    | '/classes'
     | '/communication'
+    | '/competition'
     | '/dashboard'
+    | '/enquiry'
+    | '/events'
     | '/examinations'
     | '/fee'
     | '/hostel'
+    | '/hr'
+    | '/interviews'
     | '/inventory'
     | '/library'
+    | '/medical'
     | '/payroll'
+    | '/securities'
     | '/students'
     | '/teacher-diary'
     | '/timetable'
     | '/transport'
-    | '/settings/school'
-    | '/settings/sessions'
-    | '/settings/users'
+    | '/settings'
+    | '/m/$module/$page'
   id:
     | '__root__'
     | '/'
@@ -276,21 +353,28 @@ export interface FileRouteTypes {
     | '/_authenticated/accounts'
     | '/_authenticated/attendance'
     | '/_authenticated/certificates'
+    | '/_authenticated/classes'
     | '/_authenticated/communication'
+    | '/_authenticated/competition'
     | '/_authenticated/dashboard'
+    | '/_authenticated/enquiry'
+    | '/_authenticated/events'
     | '/_authenticated/examinations'
     | '/_authenticated/fee'
     | '/_authenticated/hostel'
+    | '/_authenticated/hr'
+    | '/_authenticated/interviews'
     | '/_authenticated/inventory'
     | '/_authenticated/library'
+    | '/_authenticated/medical'
     | '/_authenticated/payroll'
+    | '/_authenticated/securities'
     | '/_authenticated/students'
     | '/_authenticated/teacher-diary'
     | '/_authenticated/timetable'
     | '/_authenticated/transport'
-    | '/_authenticated/settings/school'
-    | '/_authenticated/settings/sessions'
-    | '/_authenticated/settings/users'
+    | '/_authenticated/settings/'
+    | '/_authenticated/m/$module/$page'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -351,6 +435,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCertificatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/classes': {
+      id: '/_authenticated/classes'
+      path: '/classes'
+      fullPath: '/classes'
+      preLoaderRoute: typeof AuthenticatedClassesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/communication': {
       id: '/_authenticated/communication'
       path: '/communication'
@@ -358,11 +449,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommunicationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/competition': {
+      id: '/_authenticated/competition'
+      path: '/competition'
+      fullPath: '/competition'
+      preLoaderRoute: typeof AuthenticatedCompetitionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/enquiry': {
+      id: '/_authenticated/enquiry'
+      path: '/enquiry'
+      fullPath: '/enquiry'
+      preLoaderRoute: typeof AuthenticatedEnquiryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/examinations': {
@@ -386,6 +498,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHostelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/hr': {
+      id: '/_authenticated/hr'
+      path: '/hr'
+      fullPath: '/hr'
+      preLoaderRoute: typeof AuthenticatedHrRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/interviews': {
+      id: '/_authenticated/interviews'
+      path: '/interviews'
+      fullPath: '/interviews'
+      preLoaderRoute: typeof AuthenticatedInterviewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/inventory': {
       id: '/_authenticated/inventory'
       path: '/inventory'
@@ -400,11 +526,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLibraryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/medical': {
+      id: '/_authenticated/medical'
+      path: '/medical'
+      fullPath: '/medical'
+      preLoaderRoute: typeof AuthenticatedMedicalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/payroll': {
       id: '/_authenticated/payroll'
       path: '/payroll'
       fullPath: '/payroll'
       preLoaderRoute: typeof AuthenticatedPayrollRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/securities': {
+      id: '/_authenticated/securities'
+      path: '/securities'
+      fullPath: '/securities'
+      preLoaderRoute: typeof AuthenticatedSecuritiesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/students': {
@@ -435,25 +575,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTransportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/settings/school': {
-      id: '/_authenticated/settings/school'
-      path: '/settings/school'
-      fullPath: '/settings/school'
-      preLoaderRoute: typeof AuthenticatedSettingsSchoolRouteImport
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/settings/sessions': {
-      id: '/_authenticated/settings/sessions'
-      path: '/settings/sessions'
-      fullPath: '/settings/sessions'
-      preLoaderRoute: typeof AuthenticatedSettingsSessionsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/settings/users': {
-      id: '/_authenticated/settings/users'
-      path: '/settings/users'
-      fullPath: '/settings/users'
-      preLoaderRoute: typeof AuthenticatedSettingsUsersRouteImport
+    '/_authenticated/m/$module/$page': {
+      id: '/_authenticated/m/$module/$page'
+      path: '/m/$module/$page'
+      fullPath: '/m/$module/$page'
+      preLoaderRoute: typeof AuthenticatedMModulePageRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
@@ -463,42 +596,56 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountsRoute: typeof AuthenticatedAccountsRoute
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
+  AuthenticatedClassesRoute: typeof AuthenticatedClassesRoute
   AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
+  AuthenticatedCompetitionRoute: typeof AuthenticatedCompetitionRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEnquiryRoute: typeof AuthenticatedEnquiryRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedExaminationsRoute: typeof AuthenticatedExaminationsRoute
   AuthenticatedFeeRoute: typeof AuthenticatedFeeRoute
   AuthenticatedHostelRoute: typeof AuthenticatedHostelRoute
+  AuthenticatedHrRoute: typeof AuthenticatedHrRoute
+  AuthenticatedInterviewsRoute: typeof AuthenticatedInterviewsRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedMedicalRoute: typeof AuthenticatedMedicalRoute
   AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
+  AuthenticatedSecuritiesRoute: typeof AuthenticatedSecuritiesRoute
   AuthenticatedStudentsRoute: typeof AuthenticatedStudentsRoute
   AuthenticatedTeacherDiaryRoute: typeof AuthenticatedTeacherDiaryRoute
   AuthenticatedTimetableRoute: typeof AuthenticatedTimetableRoute
   AuthenticatedTransportRoute: typeof AuthenticatedTransportRoute
-  AuthenticatedSettingsSchoolRoute: typeof AuthenticatedSettingsSchoolRoute
-  AuthenticatedSettingsSessionsRoute: typeof AuthenticatedSettingsSessionsRoute
-  AuthenticatedSettingsUsersRoute: typeof AuthenticatedSettingsUsersRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
+  AuthenticatedMModulePageRoute: typeof AuthenticatedMModulePageRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountsRoute: AuthenticatedAccountsRoute,
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
+  AuthenticatedClassesRoute: AuthenticatedClassesRoute,
   AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
+  AuthenticatedCompetitionRoute: AuthenticatedCompetitionRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEnquiryRoute: AuthenticatedEnquiryRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedExaminationsRoute: AuthenticatedExaminationsRoute,
   AuthenticatedFeeRoute: AuthenticatedFeeRoute,
   AuthenticatedHostelRoute: AuthenticatedHostelRoute,
+  AuthenticatedHrRoute: AuthenticatedHrRoute,
+  AuthenticatedInterviewsRoute: AuthenticatedInterviewsRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedMedicalRoute: AuthenticatedMedicalRoute,
   AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
+  AuthenticatedSecuritiesRoute: AuthenticatedSecuritiesRoute,
   AuthenticatedStudentsRoute: AuthenticatedStudentsRoute,
   AuthenticatedTeacherDiaryRoute: AuthenticatedTeacherDiaryRoute,
   AuthenticatedTimetableRoute: AuthenticatedTimetableRoute,
   AuthenticatedTransportRoute: AuthenticatedTransportRoute,
-  AuthenticatedSettingsSchoolRoute: AuthenticatedSettingsSchoolRoute,
-  AuthenticatedSettingsSessionsRoute: AuthenticatedSettingsSessionsRoute,
-  AuthenticatedSettingsUsersRoute: AuthenticatedSettingsUsersRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
+  AuthenticatedMModulePageRoute: AuthenticatedMModulePageRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

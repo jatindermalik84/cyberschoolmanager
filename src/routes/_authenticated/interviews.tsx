@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ModuleDashboard } from "@/components/shell/module-dashboard";
 
-const title = "Payroll | Cyber School Manager";
-const description = "Payroll dashboard: setup, daily work and reports for your school in Cyber School Manager.";
+const title = "Interview Candidates | Cyber School Manager";
+const description = "Interview Candidates dashboard: setup, daily work and reports for your school in Cyber School Manager.";
 
-export const Route = createFileRoute("/_authenticated/payroll")({
+export const Route = createFileRoute("/_authenticated/interviews")({
   head: () => ({
     meta: [
       { title },
@@ -16,5 +16,5 @@ export const Route = createFileRoute("/_authenticated/payroll")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: () => <ModuleDashboard moduleKey="payroll" />,
+  component: () => <ModuleDashboard moduleKey="interviews" />,
 });

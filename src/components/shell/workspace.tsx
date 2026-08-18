@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
 
 import { getWorkspace } from "@/lib/erp.functions";
+import { MODULE_CATALOGUE, type ModuleDef } from "@/lib/module-catalogue";
 
 export const workspaceQueryOptions = queryOptions({
   queryKey: ["workspace"],
@@ -12,7 +13,6 @@ export const workspaceQueryOptions = queryOptions({
 type Workspace = Awaited<ReturnType<typeof getWorkspace>>;
 type School = Workspace["schools"][number];
 type Session = Workspace["sessions"][number];
-type ModuleRow = Workspace["modules"][number];
 
 interface WorkspaceValue {
   profile: Workspace["profile"];
@@ -22,7 +22,7 @@ interface WorkspaceValue {
   sessions: Session[];
   session: Session | null;
   setSessionId: (id: string) => void;
-  modules: ModuleRow[];
+  modules: ModuleDef[];
   roles: string[];
   roleLabel: string;
 }
@@ -57,9 +57,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     const roles = data.roles
       .filter((r) => !school || r.school_id === school.id || r.role === "super_admin")
       .map((r) => r.role as string);
-    const modules = data.modules.filter((m) =>
-      roles.some((role) => (m.allowed_roles as string[]).includes(role)),
-    );
+    const modules = MODULE_CATALOGUE.filter((m) =>
+      roles.some((role) => m.allowedRoles.includes(role)),
+    ).sort((a, b) => a.sortOrder - b.sortOrder);
 
     return {
       profile: data.profile,
