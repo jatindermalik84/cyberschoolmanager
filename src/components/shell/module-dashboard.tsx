@@ -217,7 +217,7 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
           </div>
         )}
 
-        <div className="grid gap-5 lg:grid-cols-12">
+        <div className="grid items-start gap-5 lg:grid-cols-12">
           {RAIL_ORDER.map((area, idx) => {
             const pages = mod.pages.filter((p) => p.area === area);
             if (pages.length === 0) return null;
@@ -251,7 +251,7 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
                 <div
                   className={cn(
                     "grid gap-x-8 gap-y-1 p-6 pt-3",
-                    wide ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-1",
+                    wide ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-1",
                     area === "report" && "sm:grid-cols-2 lg:grid-cols-4",
                   )}
                 >
