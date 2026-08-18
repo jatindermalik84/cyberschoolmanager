@@ -1,148 +1,85 @@
-# Cyber School Manager — Phase 1: Self-Serve Signup, Trial & App Shell
+# Cyber School Manager — Prototype (Login, Dashboard, Navigation)
 
-A multi-tenant rewrite that removes the two biggest bottlenecks in the current ERP:
-your team having to set up every new school, and the admin having to create and reset
-every user's password. Phase 1 delivers the full self-serve path — a school signs up,
-you approve it with a trial window, the school owner runs a setup wizard, imports their
-own data from Excel, and everyone signs in through one link.
+A clickable prototype of the rewritten ERP. Scope is deliberately narrow: prove the look,
+the shell and the navigation. No module logic, no signup flow, no imports yet.
 
-## The journey Phase 1 delivers
+## What the prototype contains
 
-```text
-Public site  →  School signs up  →  You approve + set trial  →  Owner sets up school
-                                                                      ↓
-                          Everyone signs in at one URL  ←  Excel import  ←  Setup wizard
-```
+**Login page** — single sign-in screen for the whole school (admins, teachers, students,
+parents all use the same URL, unlike the current separate links). Email + password fields,
+Google button, "forgot password" link. Working auth against the new backend, with a demo
+account so you can walk the app immediately.
 
-### 1. Public signup (no login)
-A landing page explaining the product and a "Start free trial" form: school name, city,
-board, approximate student count, owner name, email, phone. Creates a pending school
-request and confirms on screen — no account is usable yet.
+**Dashboard** — the landing screen after sign-in:
+- KPI cards: students, staff, today's attendance, fee collected this month, defaulters
+- A collection trend chart and a class-strength breakdown
+- Quick actions: new admission, collect fee, mark attendance, issue certificate
+- Recent activity list
+Numbers come from the database so the screen is real, not a static mockup.
 
-### 2. Your approval console (super admin)
-A private area listing pending requests. For each one you approve or reject, and on
-approval you set:
-- trial duration (default 14 days, editable per request)
-- limits for the trial (max students, max staff, which modules are enabled)
-- the plan tier after conversion
+**Navigation** — collapsible left sidebar with the full module tree, grouped:
+- Academics: Student Lifecycle, Attendance, Examinations, Timetable, Teacher Diary
+- Finance: Fee, Accounts
+- Operations: Transport, Library, Hostel, Inventory & Procurement
+- People: Payroll & HR
+- Communication, Certificates
+- Settings: School profile, Academic sessions, Users & roles
 
-Approval provisions the school, creates the owner account, and sends the owner an
-invite link to set their password. Global defaults for duration and limits live in a
-settings screen so you're not retyping them.
-
-Note on the approval email: sending real emails needs a verified sending domain on the
-project. Until that's set up, approvals still work and produce a copyable invite link in
-the console; we wire up automated email as soon as the domain is in place.
-
-### 3. Trial state, visible and enforced
-Every school carries a status: `pending`, `trial`, `active`, `expired`, `suspended`.
-A banner shows days remaining and an "Upgrade / talk to us" action. On expiry the school
-drops to read-only — data is never deleted. Trial caps (students/staff) are enforced on
-create and on import.
-
-### 4. Onboarding wizard (owner, self-driven)
-A checklist the owner completes without anyone from your team:
-1. School profile — name, logo, address, board, contact
-2. Academic session — start/end dates, current session
-3. Structure — classes and sections (prefilled with common Indian school presets, editable)
-4. Invite staff — add admin/principal/teacher emails; each gets a set-password link
-5. Import data — see below
-Progress is saved; the owner can leave and resume. The dashboard shows what's left.
-
-### 5. Self-serve Excel/CSV import
-The replacement for emailing formats back and forth:
-- Download a template per data type — students, staff, fee heads and structure,
-  transport routes and stops, inventory items, teacher work allocation
-- Upload the filled file
-- Column mapping screen (auto-matched, user can correct)
-- Validation preview: row-by-row errors with reasons, downloadable error file
-- Import only the valid rows, or fix and re-upload; every run is logged and reversible
-In Phase 1 the importer, mapping and validation engine are fully built; the target
-tables that exist in this phase are students, staff and classes. Fees, transport,
-inventory and allocation templates plug into the same engine as those modules land.
-
-### 6. One login for everyone
-A single `/auth` URL per school for admins, teachers, students and parents — no separate
-web links. After sign-in the user's roles decide what the menu and dashboard show.
-Sign-in options:
-- Email + password, with real self-service "forgot password"
-- Google one-click
-- Hybrid for bulk users: an admin creates or imports staff and student accounts, each
-  person receives an invite link and sets their own password. No admin-mediated resets.
-Schools are resolved by the account's membership; a user belonging to more than one
-school gets a school switcher.
-
-### 7. App shell and dashboard
-Collapsible left sidebar with the full module list — Student Lifecycle, Fee,
-Examinations, Timetable, Payroll & HR, Transport, Library, Accounts, Inventory,
-Teacher Diary, Hostel, Attendance, Communication, Certificates, Settings & Rights.
-Menu items are filtered by the signed-in user's role and by which modules the school's
-plan enables. Top bar carries school switcher, session selector, search, notifications
-and the user menu. Dashboard shows KPI cards, the onboarding checklist while incomplete,
-and quick actions. Modules not yet built open a consistent placeholder inside the shell,
-so the whole app is walkable.
-
-## Tenancy model
-
-One shared database, `school_id` on every tenant-scoped table, isolation enforced by
-row-level security — not one database per school. This removes the schema drift and
-per-school deployment burden described in the dossier.
+Top bar: school name and switcher, academic-session selector, global search,
+notifications, user menu with sign out. Sidebar collapses to icons on desktop and becomes
+a drawer on mobile. Every module link opens a consistent page inside the shell showing the
+module's title and its planned screens, so the whole app is walkable.
 
 ## Design direction
 
-A dense, confident administrative interface, deliberately not generic SaaS: deep
-indigo/slate primary with a warm amber accent, data-first spacing, tabular numerals,
-clear section rules. All colours as semantic tokens so per-school branding can be
+A dense, confident administrative interface — deliberately not generic SaaS. Deep
+indigo/slate primary with a warm amber accent, data-first spacing, tabular numerals for
+figures, clear section rules. All colours as semantic tokens so per-school branding can be
 layered on later.
 
-## Database for this phase
+## Minimum backend for the prototype
 
-- `schools` — name, code, slug, board, city, logo, status, plan tier, trial start/end,
-  student/staff caps, `legacy_db_name` for future import traceability
-- `school_signup_requests` — the public application: school + contact details, status,
-  reviewer, review notes
-- `platform_settings` — your global defaults for trial duration, caps, default modules
+Multi-tenant from the start: one shared database with `school_id` on every tenant-scoped
+table and row-level security, rather than the current one-database-per-school design.
+
+- `schools` — name, code, logo, city, board, status
 - `academic_sessions` — school, label, start/end, current flag
-- `classes` / `sections` — school-scoped structure
-- `profiles` — per user: full name, phone, avatar
-- `app_role` enum — `super_admin`, `school_owner`, `school_admin`, `principal`,
-  `teacher`, `accountant`, `librarian`, `transport_staff`, `hostel_staff`, `staff`,
-  `parent`, `student`
-- `user_school_roles` — user × school × role (roles in their own table, never on profiles)
-- `invitations` — email, school, role, token, expiry, accepted-at
-- `modules` and `plan_modules` — module catalogue and which plans/roles see what
-- `onboarding_progress` — wizard step completion per school
-- `import_jobs` and `import_rows` — upload history, mapping used, per-row status/errors
-- `students` and `staff` — the first real import targets
-- Security-definer helpers `has_role(user, school, role)`, `is_member_of_school(...)`,
-  `is_super_admin()` used by every policy
+- `profiles` — full name, phone, avatar per user
+- `app_role` enum and `user_school_roles` (user × school × role; roles in their own table,
+  never on the profile)
+- `has_role()` / `is_member_of_school()` security-definer helpers used by every policy
+- `modules` catalogue driving the sidebar and role visibility
+- Seed: one demo school, current session, module catalogue, and enough sample figures for
+  the dashboard to look real
 
-RLS everywhere: a user only ever reads rows for schools they belong to; super admin has
-a separate, explicit path. Seed data: the module catalogue, default platform settings,
-and one demo school so the shell is populated on day one.
+Email/password and Google sign-in both enabled. Protected pages sit behind an auth gate;
+the login page stays public.
 
-## Migrating existing schools' data
+## Noted for the build phase — not in the prototype
 
-Existing schools come across through the same self-serve importer rather than a bespoke
-pipeline: export from each SQL Server database to the standard templates, then upload.
-`schools.legacy_db_name` and a `legacy_id` on imported rows keep the trail back to the
-source. If volumes make that impractical for a particular school, we can add a direct
-staging-table load later — but the templated path should cover most of it.
+Recorded now so the design doesn't paint us into a corner:
 
-## Technical notes
+1. **Self-serve onboarding.** New schools must be able to start without your technical
+   team. Public signup → you approve and set trial duration and limits per request →
+   owner runs a setup wizard → owner imports their own students, staff, fees, transport,
+   inventory and teacher work allocation via in-app Excel/CSV upload with column mapping
+   and error preview. This replaces emailing formats to clients. Trial (7/15 days,
+   configurable at approval) then converts to a paid agreement.
+2. **Self-service credentials.** No more admin-created users with admin-only password
+   resets. Email + Google sign-in with real forgot-password, plus a hybrid path where an
+   admin bulk-creates or imports accounts and each person sets their own password from an
+   invite link.
+3. **One login per school** for every role — already reflected in the prototype's login.
+4. **Deployment target.** Existing infrastructure is two Windows servers, one for the
+   application and one for SQL Server. This rewrite runs as a web app with a managed
+   Postgres backend, so it does not deploy to those servers as-is. When we get to
+   go-live we'll decide between hosting the new stack alongside them, self-hosting on the
+   application server, or a full cloud move — and the SQL Server box stays the source for
+   data migration either way.
 
-- TanStack Start + React, Tailwind v4 tokens, shadcn components.
-- Public routes: landing, signup, `/auth`, accept-invite, reset-password.
-  Everything else under `src/routes/_authenticated/`; super-admin area behind a role gate.
-- Email/password plus Google sign-in, both configured this phase.
-- Trial and cap enforcement in authenticated server functions plus database policies —
-  not client-side checks.
-- Import parsing runs in the browser for preview, with the committed insert going
-  through a server function so RLS and caps apply.
+## Phases after the prototype
 
-## Phases after this
-
-1. Student Lifecycle — enquiry, registration, admission, student records
-2. Fee — structures, demands, collection, receipts, defaulters
-3. Examinations — exam setup, marks entry, report cards
-4. Timetable, Transport, Payroll, and the remaining modules
+1. Self-serve signup, approval, trial and the onboarding wizard + import engine
+2. Student Lifecycle — enquiry, registration, admission, student records
+3. Fee — structures, demands, collection, receipts, defaulters
+4. Examinations, Timetable, Transport, Payroll, and the rest
