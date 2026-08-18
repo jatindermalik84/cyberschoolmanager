@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, ChevronRight, LayoutDashboard } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 import { type ModuleArea } from "@/lib/module-catalogue";
@@ -101,35 +102,47 @@ export function AppSidebar() {
             {AREA_ORDER.map((area) => {
               const pages = activeModule.pages.filter((p) => p.area === area);
               if (pages.length === 0) return null;
+              const hasActivePage = pages.some(
+                (p) => pathname === `/m/${activeModule.key}/${p.pageKey}`,
+              );
               return (
-                <SidebarGroup key={area}>
-                  <SidebarGroupLabel>{AREA_TITLES[area]}</SidebarGroupLabel>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
-                      {pages.map((p) => {
-                        const active = pathname === `/m/${activeModule.key}/${p.pageKey}`;
-                        return (
-                          <SidebarMenuItem key={p.pageKey}>
-                            <SidebarMenuButton
-                              asChild
-                              isActive={active}
-                              tooltip={p.label}
-                              className={active ? "nav-glow" : undefined}
-                            >
-                              <Link
-                                to="/m/$module/$page"
-                                params={{ module: activeModule.key, page: p.pageKey }}
-                              >
-                                <span className="size-1.5 shrink-0 rounded-full bg-sidebar-foreground/40" />
-                                <span className="truncate">{p.label}</span>
-                              </Link>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        );
-                      })}
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
+                <Collapsible key={area} defaultOpen={hasActivePage}>
+                  <SidebarGroup className="p-0">
+                    <SidebarGroupLabel asChild>
+                      <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                        <span>{AREA_TITLES[area]}</span>
+                        <ChevronRight className="size-4 shrink-0 text-sidebar-foreground/70 transition-transform duration-200 group-data-[state=open]/label:rotate-90" />
+                      </CollapsibleTrigger>
+                    </SidebarGroupLabel>
+                    <CollapsibleContent>
+                      <SidebarGroupContent className="px-2 pb-1">
+                        <SidebarMenu>
+                          {pages.map((p) => {
+                            const active = pathname === `/m/${activeModule.key}/${p.pageKey}`;
+                            return (
+                              <SidebarMenuItem key={p.pageKey}>
+                                <SidebarMenuButton
+                                  asChild
+                                  isActive={active}
+                                  tooltip={p.label}
+                                  className={active ? "nav-glow" : undefined}
+                                >
+                                  <Link
+                                    to="/m/$module/$page"
+                                    params={{ module: activeModule.key, page: p.pageKey }}
+                                  >
+                                    <span className="size-1.5 shrink-0 rounded-full bg-sidebar-foreground/40" />
+                                    <span className="truncate">{p.label}</span>
+                                  </Link>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            );
+                          })}
+                        </SidebarMenu>
+                      </SidebarGroupContent>
+                    </CollapsibleContent>
+                  </SidebarGroup>
+                </Collapsible>
               );
             })}
           </>
