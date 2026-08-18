@@ -49,8 +49,28 @@ export function AppSidebar() {
     ? pathname.replace(`/m/${activeModule.key}/`, "")
     : "";
 
-  return (
-    <Sidebar collapsible="icon">
+  const areaPages = useMemo(() => {
+    if (!activeModule) return {} as Record<ModuleArea, ModulePage[]>;
+    return AREA_ORDER.reduce((acc, area) => {
+      const pages = activeModule.pages.filter(
+        (p) => p.area === area && matchesQuery(p.label, query),
+      );
+      acc[area] = pages;
+      return acc;
+    }, {} as Record<ModuleArea, ModulePage[]>);
+  }, [activeModule, query]);
+
+  const [openAreas, setOpenAreas] = useState<Record<ModuleArea, boolean>>(() => {
+    if (!activeModule) return {} as Record<ModuleArea, boolean>;
+    return AREA_ORDER.reduce((acc, area) => {
+      const pages = activeModule.pages.filter((p) => p.area === area);
+      acc[area] = pages.some((p) => activeModulePageKey === p.pageKey);
+      return acc;
+    }, {} as Record<ModuleArea, boolean>);
+  });
+
+  const isSearching = query.trim().length > 0;
+
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-2.5 px-1 py-1.5">
           <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sidebar-primary">
