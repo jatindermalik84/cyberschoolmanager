@@ -263,3 +263,43 @@ function AuthPage() {
     </div>
   );
 }
+
+function PasswordInput({
+  id,
+  value,
+  onChange,
+  autoComplete,
+  minLength,
+}: {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: string;
+  minLength?: number;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <Input
+        id={id}
+        type={show ? "text" : "password"}
+        autoComplete={autoComplete}
+        minLength={minLength}
+        required
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="pr-10"
+      />
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+        aria-label={show ? "Hide password" : "Show password"}
+        aria-controls={id}
+      >
+        {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+      </button>
+    </div>
+  );
+}
+
