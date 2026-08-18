@@ -87,7 +87,7 @@ export function AppSidebar() {
           <img
             src={csmLogo.url}
             alt="Cyber School Manager logo"
-            className="h-7 w-auto rounded-sm bg-background/95 px-1 py-0.5"
+            className="h-8 w-auto"
             loading="lazy"
           />
           <p className="mt-2 text-[11px] leading-tight text-sidebar-foreground/60">

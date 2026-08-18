@@ -131,7 +131,7 @@ function AuthPage() {
           <img
             src={csmLogo.url}
             alt="Cyber School Manager logo"
-            className="h-10 w-auto rounded-sm bg-background px-2 py-1"
+            className="h-12 w-auto"
           />
           <p className="text-xs text-sidebar-foreground/50">
             Phase 1 prototype · modules roll out in later phases
