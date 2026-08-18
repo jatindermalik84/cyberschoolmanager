@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Hammer } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -26,17 +26,20 @@ export const Route = createFileRoute("/_authenticated/m/$module/$page")({
       ],
     };
   },
-  loader: ({ params }) => {
-    const mod = MODULE_BY_KEY[params.module];
-    const page = mod?.pages.find((p) => p.pageKey === params.page);
-    if (!mod || !page) throw notFound();
-    return { moduleName: mod.name, moduleRoute: mod.route, page };
-  },
   component: PlannedScreen,
 });
 
 function PlannedScreen() {
-  const { moduleName, moduleRoute, page } = Route.useLoaderData();
+  const params = Route.useParams();
+  const mod = MODULE_BY_KEY[params.module];
+  const page = mod?.pages.find((p) => p.pageKey === params.page);
+
+  if (!mod || !page) {
+    return <p className="text-sm text-muted-foreground">This screen does not exist.</p>;
+  }
+
+  const moduleName = mod.name;
+  const moduleRoute = mod.route;
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">

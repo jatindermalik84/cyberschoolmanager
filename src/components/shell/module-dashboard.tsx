@@ -115,7 +115,7 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
               label={k.label}
               value={k.value}
               {...(k.hint ? { hint: k.hint } : {})}
-              tone={i === 1 ? "accent" : i === 2 ? "success" : "default"}
+              tone={i === 1 ? "accent" : i === 2 ? "success" : "primary"}
             />
           ))}
         </div>
