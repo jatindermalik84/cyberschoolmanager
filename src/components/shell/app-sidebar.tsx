@@ -140,7 +140,20 @@ export function AppSidebar() {
                   type="text"
                   placeholder="Search screens..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setQuery(next);
+                    const trimmed = next.trim();
+                    if (trimmed) {
+                      setOpenAreas((prev) => ({
+                        ...prev,
+                        ...AREA_ORDER.reduce((acc, area) => {
+                          acc[area] = areaPages[area]?.length > 0;
+                          return acc;
+                        }, {} as Record<ModuleArea, boolean>),
+                      }));
+                    }
+                  }}
                   className="h-9 w-full rounded-lg border-sidebar-border/50 bg-sidebar-accent/40 pl-9 pr-7 text-sm text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus-visible:bg-sidebar-accent focus-visible:ring-1 focus-visible:ring-sidebar-ring"
                 />
                 {query ? (
