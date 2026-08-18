@@ -263,7 +263,3 @@ function AuthPage() {
     </div>
   );
 }
-      </main>
-    </div>
-  );
-}
