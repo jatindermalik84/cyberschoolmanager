@@ -8,7 +8,7 @@ export function KpiCard({
 }: {
   label: string;
   value: string;
-  hint?: string;
+  hint?: string | undefined;
   icon: LucideIcon;
   tone?: "primary" | "accent" | "success" | "warning";
 }) {
