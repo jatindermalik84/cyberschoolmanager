@@ -16,7 +16,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { useWorkspace } from "./workspace";
 
-
 export function TopBar() {
   const { schools, school, setSchoolId, sessions, session, setSessionId, profile, roleLabel } =
     useWorkspace();
