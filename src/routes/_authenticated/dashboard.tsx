@@ -7,6 +7,7 @@ import {
   Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
+import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { useWorkspace } from "@/components/shell/workspace";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDashboard } from "@/lib/erp.functions";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -257,6 +259,24 @@ function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <footer className="border-t pt-5">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <img
+            src={csmLogo.url}
+            alt="Cyber School Manager logo"
+            className="h-8 w-auto"
+            loading="lazy"
+          />
+          <div className="text-[11px] leading-tight text-muted-foreground">
+            <p>&copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved.</p>
+            <p className="mt-1">
+              Cyber School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
+

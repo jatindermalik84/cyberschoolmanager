@@ -1,15 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard } from "lucide-react";
 
-import csmLogo from "@/assets/csm-logo.png.asset.json";
-
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
+
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
@@ -82,23 +81,8 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border">
-        <div className="px-2 py-1 group-data-[collapsible=icon]:hidden">
-          <img
-            src={csmLogo.url}
-            alt="Cyber School Manager logo"
-            className="h-8 w-auto"
-            loading="lazy"
-          />
-          <p className="mt-2 text-[11px] leading-tight text-sidebar-foreground/60">
-            &copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved.
-          </p>
-          <p className="mt-1 text-[11px] leading-tight text-sidebar-foreground/45">
-            Cyber School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
-          </p>
-        </div>
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
 }
+
