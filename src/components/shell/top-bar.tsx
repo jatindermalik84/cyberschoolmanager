@@ -1,6 +1,8 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, User } from "lucide-react";
+
+import csmLogo from "@/assets/csm-logo.png.asset.json";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -39,7 +41,21 @@ export function TopBar() {
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-1 h-5" />
 
+      <Link to="/dashboard" className="hidden shrink-0 items-center gap-2 sm:flex">
+        <img
+          src={csmLogo.url}
+          alt="Cyber School Manager logo"
+          className="h-7 w-auto"
+          loading="lazy"
+        />
+        <span className="hidden font-display text-sm font-semibold text-foreground lg:inline">
+          Cyber School Manager
+        </span>
+      </Link>
+      <Separator orientation="vertical" className="hidden h-5 sm:flex" />
+
       <Select value={school?.id ?? ""} onValueChange={setSchoolId}>
+
         <SelectTrigger className="h-9 w-[150px] md:w-[230px]" aria-label="Select school">
           <SelectValue placeholder="Select school" />
         </SelectTrigger>
