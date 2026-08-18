@@ -15,6 +15,7 @@ import { Route as AuthenticatedAccountsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedCommunicationRouteImport } from './routes/_authenticated/communication'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedExaminationsRouteImport } from './routes/_authenticated/examinations'
 import { Route as AuthenticatedFeeRouteImport } from './routes/_authenticated/fee'
 import { Route as AuthenticatedHostelRouteImport } from './routes/_authenticated/hostel'
@@ -60,6 +61,11 @@ const AuthenticatedCommunicationRoute =
     path: '/communication',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedExaminationsRoute =
   AuthenticatedExaminationsRouteImport.update({
     id: '/examinations',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/examinations': typeof AuthenticatedExaminationsRoute
   '/fee': typeof AuthenticatedFeeRoute
   '/hostel': typeof AuthenticatedHostelRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/examinations': typeof AuthenticatedExaminationsRoute
   '/fee': typeof AuthenticatedFeeRoute
   '/hostel': typeof AuthenticatedHostelRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/examinations': typeof AuthenticatedExaminationsRoute
   '/_authenticated/fee': typeof AuthenticatedFeeRoute
   '/_authenticated/hostel': typeof AuthenticatedHostelRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/certificates'
     | '/communication'
+    | '/dashboard'
     | '/examinations'
     | '/fee'
     | '/hostel'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/certificates'
     | '/communication'
+    | '/dashboard'
     | '/examinations'
     | '/fee'
     | '/hostel'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/_authenticated/attendance'
     | '/_authenticated/certificates'
     | '/_authenticated/communication'
+    | '/_authenticated/dashboard'
     | '/_authenticated/examinations'
     | '/_authenticated/fee'
     | '/_authenticated/hostel'
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/communication'
       fullPath: '/communication'
       preLoaderRoute: typeof AuthenticatedCommunicationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/examinations': {
@@ -405,6 +424,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedExaminationsRoute: typeof AuthenticatedExaminationsRoute
   AuthenticatedFeeRoute: typeof AuthenticatedFeeRoute
   AuthenticatedHostelRoute: typeof AuthenticatedHostelRoute
@@ -425,6 +445,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedExaminationsRoute: AuthenticatedExaminationsRoute,
   AuthenticatedFeeRoute: AuthenticatedFeeRoute,
   AuthenticatedHostelRoute: AuthenticatedHostelRoute,
