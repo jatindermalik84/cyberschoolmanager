@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { GraduationCap, Loader2, Mail } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -197,13 +197,11 @@ function AuthPage() {
                         Forgot password?
                       </button>
                     </div>
-                    <Input
+                    <PasswordInput
                       id="password"
-                      type="password"
-                      autoComplete="current-password"
-                      required
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={setPassword}
+                      autoComplete="current-password"
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={busy}>
@@ -237,14 +235,12 @@ function AuthPage() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="password-up">Password</Label>
-                    <Input
+                    <PasswordInput
                       id="password-up"
-                      type="password"
+                      value={password}
+                      onChange={setPassword}
                       autoComplete="new-password"
                       minLength={8}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={busy}>
@@ -263,3 +259,43 @@ function AuthPage() {
     </div>
   );
 }
+
+function PasswordInput({
+  id,
+  value,
+  onChange,
+  autoComplete,
+  minLength,
+}: {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: string;
+  minLength?: number;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <Input
+        id={id}
+        type={show ? "text" : "password"}
+        autoComplete={autoComplete}
+        minLength={minLength}
+        required
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="pr-10"
+      />
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+        aria-label={show ? "Hide password" : "Show password"}
+        aria-controls={id}
+      >
+        {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+      </button>
+    </div>
+  );
+}
+
