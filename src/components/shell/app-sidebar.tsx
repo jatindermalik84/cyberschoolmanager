@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard } from "lucide-react";
+import { ArrowLeft, LayoutDashboard } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -8,8 +8,16 @@ import {
 } from "@/components/ui/sidebar";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
+import { AREA_LABELS, type ModuleArea } from "@/lib/module-catalogue";
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
+
+const AREA_ORDER: ModuleArea[] = ["transaction", "setup", "report"];
+const AREA_TITLES: Record<ModuleArea, string> = {
+  transaction: "Daily operations",
+  setup: "Configuration",
+  report: "Insights & reports",
+};
 
 export function AppSidebar() {
   const { modules, school, roleLabel } = useWorkspace();
@@ -19,6 +27,15 @@ export function AppSidebar() {
     group,
     items: modules.filter((m) => m.navGroup === group),
   })).filter((g) => g.items.length > 0);
+
+  const activeModule =
+    modules.find(
+      (m) =>
+        pathname === m.route ||
+        pathname.startsWith(`${m.route}/`) ||
+        pathname.startsWith(`/m/${m.key}/`),
+    ) ?? null;
+  void AREA_LABELS;
 
   return (
     <Sidebar collapsible="icon">
@@ -47,6 +64,78 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
+        {activeModule ? (
+          <>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip="All modules">
+                      <Link to="/dashboard">
+                        <ArrowLeft />
+                        <span>All modules</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    {(() => {
+                      const Icon = iconFor(activeModule.icon);
+                      return (
+                        <SidebarMenuButton
+                          asChild
+                          isActive={pathname === activeModule.route}
+                          tooltip={activeModule.name}
+                          className={pathname === activeModule.route ? "nav-glow" : undefined}
+                        >
+                          <Link to={activeModule.route as "/dashboard"}>
+                            <Icon />
+                            <span>{activeModule.name} overview</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      );
+                    })()}
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {AREA_ORDER.map((area) => {
+              const pages = activeModule.pages.filter((p) => p.area === area);
+              if (pages.length === 0) return null;
+              return (
+                <SidebarGroup key={area}>
+                  <SidebarGroupLabel>{AREA_TITLES[area]}</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {pages.map((p) => {
+                        const active = pathname === `/m/${activeModule.key}/${p.pageKey}`;
+                        return (
+                          <SidebarMenuItem key={p.pageKey}>
+                            <SidebarMenuButton
+                              asChild
+                              isActive={active}
+                              tooltip={p.label}
+                              className={active ? "nav-glow" : undefined}
+                            >
+                              <Link
+                                to="/m/$module/$page"
+                                params={{ module: activeModule.key, page: p.pageKey }}
+                              >
+                                <span className="size-1.5 shrink-0 rounded-full bg-sidebar-foreground/40" />
+                                <span className="truncate">{p.label}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              );
+            })}
+          </>
+        ) : (
+          <>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -91,6 +180,8 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
+          </>
+        )}
       </SidebarContent>
 
       <SidebarRail />
