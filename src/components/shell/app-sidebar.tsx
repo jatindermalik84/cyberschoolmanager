@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, ChevronRight, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -7,6 +8,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 import { type ModuleArea } from "@/lib/module-catalogue";
@@ -20,9 +22,15 @@ const AREA_TITLES: Record<ModuleArea, string> = {
   report: "Insights & reports",
 };
 
+function matchesQuery(label: string, query: string) {
+  if (!query.trim()) return true;
+  return label.toLowerCase().includes(query.trim().toLowerCase());
+}
+
 export function AppSidebar() {
   const { modules, school, roleLabel } = useWorkspace();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [query, setQuery] = useState("");
 
   const groups = GROUP_ORDER.map((group) => ({
     group,
@@ -36,6 +44,10 @@ export function AppSidebar() {
         pathname.startsWith(`${m.route}/`) ||
         pathname.startsWith(`/m/${m.key}/`),
     ) ?? null;
+
+  const activeModulePageKey = activeModule
+    ? pathname.replace(`/m/${activeModule.key}/`, "")
+    : "";
 
   return (
     <Sidebar collapsible="icon">
@@ -99,14 +111,38 @@ export function AppSidebar() {
               </SidebarGroupContent>
             </SidebarGroup>
 
+            <div className="px-2 py-2 group-data-[collapsible=icon]:hidden">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-sidebar-foreground/60" />
+                <Input
+                  type="text"
+                  placeholder="Search screens..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="h-9 w-full rounded-lg border-sidebar-border/50 bg-sidebar-accent/40 pl-9 pr-7 text-sm text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus-visible:bg-sidebar-accent focus-visible:ring-1 focus-visible:ring-sidebar-ring"
+                />
+                {query ? (
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-sidebar-foreground/60 hover:text-sidebar-foreground"
+                    aria-label="Clear search"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
             {AREA_ORDER.map((area) => {
-              const pages = activeModule.pages.filter((p) => p.area === area);
-              if (pages.length === 0) return null;
-              const hasActivePage = pages.some(
-                (p) => pathname === `/m/${activeModule.key}/${p.pageKey}`,
+              const pages = activeModule.pages.filter(
+                (p) => p.area === area && matchesQuery(p.label, query),
               );
+              if (pages.length === 0) return null;
+              const hasActivePage = pages.some((p) => activeModulePageKey === p.pageKey);
+              const shouldOpen = query.trim().length > 0 || hasActivePage;
               return (
-                <Collapsible key={area} defaultOpen={hasActivePage}>
+                <Collapsible key={area} defaultOpen={shouldOpen}>
                   <SidebarGroup className="p-0">
                     <SidebarGroupLabel asChild>
                       <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
@@ -118,7 +154,7 @@ export function AppSidebar() {
                       <SidebarGroupContent className="px-2 pb-1">
                         <SidebarMenu>
                           {pages.map((p) => {
-                            const active = pathname === `/m/${activeModule.key}/${p.pageKey}`;
+                            const active = activeModulePageKey === p.pageKey;
                             return (
                               <SidebarMenuItem key={p.pageKey}>
                                 <SidebarMenuButton
@@ -145,6 +181,12 @@ export function AppSidebar() {
                 </Collapsible>
               );
             })}
+
+            {query.trim() && activeModule.pages.filter((p) => matchesQuery(p.label, query)).length === 0 ? (
+              <p className="px-4 py-3 text-xs text-sidebar-foreground/60 group-data-[collapsible=icon]:hidden">
+                No screens match "{query.trim()}".
+              </p>
+            ) : null}
           </>
         ) : (
           <>
