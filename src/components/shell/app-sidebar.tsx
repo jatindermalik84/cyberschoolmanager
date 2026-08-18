@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
 
@@ -11,7 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-import { type ModuleArea } from "@/lib/module-catalogue";
+import { type ModuleArea, type ModulePage } from "@/lib/module-catalogue";
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
@@ -48,6 +48,28 @@ export function AppSidebar() {
   const activeModulePageKey = activeModule
     ? pathname.replace(`/m/${activeModule.key}/`, "")
     : "";
+
+  const areaPages = useMemo(() => {
+    if (!activeModule) return {} as Record<ModuleArea, ModulePage[]>;
+    return AREA_ORDER.reduce((acc, area) => {
+      const pages = activeModule.pages.filter(
+        (p) => p.area === area && matchesQuery(p.label, query),
+      );
+      acc[area] = pages;
+      return acc;
+    }, {} as Record<ModuleArea, ModulePage[]>);
+  }, [activeModule, query]);
+
+  const [openAreas, setOpenAreas] = useState<Record<ModuleArea, boolean>>(() => {
+    if (!activeModule) return {} as Record<ModuleArea, boolean>;
+    return AREA_ORDER.reduce((acc, area) => {
+      const pages = activeModule.pages.filter((p) => p.area === area);
+      acc[area] = pages.some((p) => activeModulePageKey === p.pageKey);
+      return acc;
+    }, {} as Record<ModuleArea, boolean>);
+  });
+
+  const isSearching = query.trim().length > 0;
 
   return (
     <Sidebar collapsible="icon">
@@ -118,7 +140,20 @@ export function AppSidebar() {
                   type="text"
                   placeholder="Search screens..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setQuery(next);
+                    const trimmed = next.trim();
+                    if (trimmed) {
+                      setOpenAreas((prev) => ({
+                        ...prev,
+                        ...AREA_ORDER.reduce((acc, area) => {
+                          acc[area] = areaPages[area]?.length > 0;
+                          return acc;
+                        }, {} as Record<ModuleArea, boolean>),
+                      }));
+                    }
+                  }}
                   className="h-9 w-full rounded-lg border-sidebar-border/50 bg-sidebar-accent/40 pl-9 pr-7 text-sm text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus-visible:bg-sidebar-accent focus-visible:ring-1 focus-visible:ring-sidebar-ring"
                 />
                 {query ? (
@@ -135,14 +170,16 @@ export function AppSidebar() {
             </div>
 
             {AREA_ORDER.map((area) => {
-              const pages = activeModule.pages.filter(
-                (p) => p.area === area && matchesQuery(p.label, query),
-              );
+              const pages = areaPages[area] ?? [];
               if (pages.length === 0) return null;
-              const hasActivePage = pages.some((p) => activeModulePageKey === p.pageKey);
-              const shouldOpen = query.trim().length > 0 || hasActivePage;
               return (
-                <Collapsible key={area} defaultOpen={shouldOpen}>
+                <Collapsible
+                  key={area}
+                  open={isSearching ? true : openAreas[area]}
+                  onOpenChange={(open) =>
+                    setOpenAreas((prev) => ({ ...prev, [area]: open }))
+                  }
+                >
                   <SidebarGroup className="p-0">
                     <SidebarGroupLabel asChild>
                       <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
