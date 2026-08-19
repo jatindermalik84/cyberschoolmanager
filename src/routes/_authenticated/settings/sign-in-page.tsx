@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { Copy, ExternalLink, Loader2, Megaphone, Plus, Save, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Loader2, Megaphone, Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
