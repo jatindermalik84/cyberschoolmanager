@@ -181,6 +181,27 @@ function SignInPageEditor() {
     background_brightness: form?.background_brightness ?? DEFAULT_OVERLAY.backgroundBrightness,
   });
 
+  const currentPayload = form
+    ? {
+        slug: form.slug.trim().toLowerCase(),
+        brand_name: form.brand_name.trim(),
+        logo_url: form.logo_url.trim() || null,
+        background_url: form.background_url.trim() || null,
+        headline: form.headline.trim(),
+        description: form.description.trim(),
+        highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
+        banner_enabled: form.banner_enabled,
+        banner_text: form.banner_text.trim() || null,
+        banner_tone: form.banner_tone,
+        is_published: form.is_published,
+        overlay_tint: form.overlay_tint,
+        overlay_opacity: form.overlay_opacity,
+        overlay_blur: form.overlay_blur,
+        background_brightness: form.background_brightness,
+      }
+    : null;
+  const dirty = !!currentPayload && (!savedSnapshot || diffFields(savedSnapshot, currentPayload).length > 0);
+
   if (!school || loading || !form) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -191,13 +212,25 @@ function SignInPageEditor() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <p className="text-sm text-muted-foreground">Settings · Setup</p>
-        <h1 className="font-display text-2xl font-semibold">Sign-in page content</h1>
-        <p className="text-sm text-muted-foreground">
-          Update what parents, students and staff see on your school's sign-in link — including a
-          temporary event banner.
-        </p>
+      <div className="sticky top-0 z-20 -mx-1 flex flex-wrap items-end justify-between gap-3 bg-background/95 px-1 py-2 backdrop-blur">
+        <div className="space-y-1">
+          <p className="text-sm text-muted-foreground">Settings · Setup</p>
+          <h1 className="font-display text-2xl font-semibold">Sign-in page content</h1>
+          <p className="text-sm text-muted-foreground">
+            Update what parents, students and staff see on your school's sign-in link — including a
+            temporary event banner.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {dirty ? (
+            <span className="text-xs font-medium text-amber-600 dark:text-amber-400">Unsaved changes</span>
+          ) : (
+            <span className="text-xs text-muted-foreground">All changes saved</span>
+          )}
+          <Button onClick={handleSave} disabled={saving || !dirty}>
+            {saving ? <Loader2 className="animate-spin" /> : <Save />} Save changes
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
