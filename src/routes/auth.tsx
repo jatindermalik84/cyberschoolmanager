@@ -37,7 +37,6 @@ function AuthPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function handleSignIn(e: React.FormEvent) {
@@ -47,36 +46,6 @@ function AuthPage() {
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     navigate({ to: "/dashboard" });
-  }
-
-  async function handleSignUp(e: React.FormEvent) {
-    e.preventDefault();
-    setBusy(true);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: window.location.origin,
-        data: { full_name: fullName },
-      },
-    });
-    setBusy(false);
-    if (error) { toast.error(error.message); return; }
-    if (!data.session) {
-      toast.success("Check your email to confirm your account before signing in.");
-      return;
-    }
-    navigate({ to: "/dashboard" });
-  }
-
-  async function handleGoogle() {
-    setBusy(true);
-    try {
-      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch {
-      setBusy(false);
-      toast.error("Google sign-in could not start. Please try again.");
-    }
   }
 
   async function handleReset() {
