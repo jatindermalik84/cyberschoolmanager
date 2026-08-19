@@ -116,109 +116,41 @@ function AuthPage() {
             <CardDescription>Use the account your school administrator set up.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogle}
-              disabled={busy}
-            >
-              Continue with Google
-            </Button>
-
-            <div className="my-5 flex items-center gap-3">
-              <Separator className="flex-1" />
-              <span className="text-xs uppercase tracking-wide text-muted-foreground">or</span>
-              <Separator className="flex-1" />
-            </div>
-
-            <Tabs defaultValue="signin">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign in</TabsTrigger>
-                <TabsTrigger value="signup">Create account</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="signin" className="mt-4">
-              <form className="space-y-4" onSubmit={handleSignIn}>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email">Username</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter username"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="password">Password</Label>
-                      <button
-                        type="button"
-                        onClick={handleReset}
-                        className="text-xs text-primary underline-offset-4 hover:underline"
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
-                    <PasswordInput
-                      id="password"
-                      value={password}
-                      onChange={setPassword}
-                      autoComplete="current-password"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={busy}>
-                    {busy ? <Loader2 className="animate-spin" /> : <Mail />} Sign in
-                  </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="signup" className="mt-4">
-                <form className="space-y-4" onSubmit={handleSignUp}>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="name">Full name</Label>
-                    <Input
-                      id="name"
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Anita Sharma"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email-up">Email</Label>
-                    <Input
-                      id="email-up"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="password-up">Password</Label>
-                    <PasswordInput
-                      id="password-up"
-                      value={password}
-                      onChange={setPassword}
-                      autoComplete="new-password"
-                      minLength={8}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={busy}>
-                    {busy ? <Loader2 className="animate-spin" /> : null} Create account
-                  </Button>
-                  <p className="text-xs text-muted-foreground">
-                    New accounts need a school role assigned by an administrator before modules
-                    unlock.
-                  </p>
-                </form>
-              </TabsContent>
-            </Tabs>
+            <form className="space-y-4" onSubmit={handleSignIn}>
+              <div className="space-y-1.5">
+                <Label htmlFor="email">Username</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter username"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="text-xs text-primary underline-offset-4 hover:underline"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+                <PasswordInput
+                  id="password"
+                  value={password}
+                  onChange={setPassword}
+                  autoComplete="current-password"
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={busy}>
+                {busy ? <Loader2 className="animate-spin" /> : <Mail />} Sign in
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </main>
