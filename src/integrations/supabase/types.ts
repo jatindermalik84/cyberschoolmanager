@@ -328,6 +328,56 @@ export type Database = {
         }
         Relationships: []
       }
+      sign_in_page_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string
+          changed_fields: string[]
+          created_at: string
+          details: Json
+          entity: string
+          entity_id: string | null
+          entity_label: string | null
+          id: string
+          school_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string
+          changed_fields?: string[]
+          created_at?: string
+          details?: Json
+          entity: string
+          entity_id?: string | null
+          entity_label?: string | null
+          id?: string
+          school_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string
+          changed_fields?: string[]
+          created_at?: string
+          details?: Json
+          entity?: string
+          entity_id?: string | null
+          entity_label?: string | null
+          id?: string
+          school_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sign_in_page_audit_log_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sign_in_page_events: {
         Row: {
           background_url: string | null
