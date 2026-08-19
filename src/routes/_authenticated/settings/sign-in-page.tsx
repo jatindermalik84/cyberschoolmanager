@@ -12,8 +12,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useWorkspace } from "@/components/shell/workspace";
 import { SignInEventsCard } from "@/components/settings/sign-in-events";
+import { SignInAuditLogCard } from "@/components/settings/sign-in-audit-log";
 import { supabase } from "@/integrations/supabase/client";
 import { BANNER_TONES, bannerClasses } from "@/lib/sign-in-content";
+import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
 
 const title = "Sign-in page content | Cyber School Manager";
 const description = "Customise the headline, highlights, logo, background and event banner shown on your school's sign-in link.";
@@ -52,6 +54,8 @@ function SignInPageEditor() {
   const [form, setForm] = useState<FormState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savedSnapshot, setSavedSnapshot] = useState<Record<string, unknown> | null>(null);
+  const [auditToken, setAuditToken] = useState(0);
 
   useEffect(() => {
     if (!school) return;
@@ -65,6 +69,23 @@ function SignInPageEditor() {
         .maybeSingle();
       if (cancelled) return;
       if (error) toast.error(error.message);
+      setSavedSnapshot(
+        data
+          ? {
+              slug: data.slug,
+              brand_name: data.brand_name,
+              logo_url: data.logo_url,
+              background_url: data.background_url,
+              headline: data.headline,
+              description: data.description,
+              highlights: data.highlights,
+              banner_enabled: data.banner_enabled,
+              banner_text: data.banner_text,
+              banner_tone: data.banner_tone,
+              is_published: data.is_published,
+            }
+          : null,
+      );
       setForm({
         slug: data?.slug ?? school.code.toLowerCase(),
         brand_name: data?.brand_name ?? school.name,
@@ -102,28 +123,39 @@ function SignInPageEditor() {
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("sign_in_pages").upsert(
-      {
-        school_id: school.id,
-        slug,
-        brand_name: form.brand_name.trim() || school.name,
-        logo_url: form.logo_url.trim() || null,
-        background_url: form.background_url.trim() || null,
-        headline: form.headline.trim(),
-        description: form.description.trim(),
-        highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
-        banner_enabled: form.banner_enabled,
-        banner_text: form.banner_text.trim() || null,
-        banner_tone: form.banner_tone,
-        is_published: form.is_published,
-      },
-      { onConflict: "school_id" },
-    );
+    const payload = {
+      slug,
+      brand_name: form.brand_name.trim() || school.name,
+      logo_url: form.logo_url.trim() || null,
+      background_url: form.background_url.trim() || null,
+      headline: form.headline.trim(),
+      description: form.description.trim(),
+      highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
+      banner_enabled: form.banner_enabled,
+      banner_text: form.banner_text.trim() || null,
+      banner_tone: form.banner_tone,
+      is_published: form.is_published,
+    };
+    const { error } = await supabase
+      .from("sign_in_pages")
+      .upsert({ school_id: school.id, ...payload }, { onConflict: "school_id" });
     setSaving(false);
     if (error) {
       toast.error(error.message);
       return;
     }
+    const changedFields = diffFields(savedSnapshot, payload);
+    if (!savedSnapshot || changedFields.length > 0) {
+      await logSignInAudit({
+        schoolId: school.id,
+        entity: "page",
+        entityLabel: payload.brand_name,
+        action: savedSnapshot ? "updated" : "created",
+        changedFields,
+      });
+      setAuditToken((n) => n + 1);
+    }
+    setSavedSnapshot(payload);
     patch({ slug });
     toast.success("Sign-in page updated.");
   }
@@ -304,7 +336,9 @@ function SignInPageEditor() {
             {saving ? <Loader2 className="animate-spin" /> : <Save />} Save changes
           </Button>
 
-          <SignInEventsCard schoolId={school.id} />
+          <SignInEventsCard schoolId={school.id} onLogged={() => setAuditToken((n) => n + 1)} />
+
+          <SignInAuditLogCard schoolId={school.id} refreshToken={auditToken} />
         </div>
 
         <div className="xl:sticky xl:top-6 xl:h-fit">
