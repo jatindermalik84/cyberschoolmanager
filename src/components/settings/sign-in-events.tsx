@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { ImageUploadField } from "@/components/settings/image-upload-field";
 import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
 import {
   BANNER_TONES,
@@ -301,15 +302,14 @@ export function SignInEventsCard({
                       onChange={(e) => patch(index, { headline: e.target.value })}
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor={`evbg-${index}`}>Background image URL</Label>
-                    <Input
-                      id={`evbg-${index}`}
-                      placeholder="https://…"
-                      value={draft.background_url}
-                      onChange={(e) => patch(index, { background_url: e.target.value })}
-                    />
-                  </div>
+                  <ImageUploadField
+                    id={`evbg-${index}`}
+                    label="Background image"
+                    schoolId={schoolId}
+                    folder="event-background"
+                    value={draft.background_url}
+                    onChange={(url) => patch(index, { background_url: url })}
+                  />
                 </div>
 
                 <div className="space-y-1.5">
