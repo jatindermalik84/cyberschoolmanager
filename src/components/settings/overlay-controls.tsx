@@ -28,7 +28,7 @@ export function OverlayControls({
   idPrefix: string;
   value: OverlayValue;
   onChange: (next: Partial<OverlayValue>) => void;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 }) {
   return (
     <div className="space-y-4 rounded-lg border border-border/70 p-3">
@@ -43,7 +43,7 @@ export function OverlayControls({
         <Label htmlFor={`${idPrefix}-tint`}>Tint</Label>
         <Select
           value={value.overlay_tint}
-          disabled={disabled}
+          disabled={disabled ?? false}
           onValueChange={(v) => onChange({ overlay_tint: v as OverlayTint })}
         >
           <SelectTrigger id={`${idPrefix}-tint`}>
@@ -66,7 +66,7 @@ export function OverlayControls({
         min={0}
         max={100}
         step={5}
-        disabled={disabled || value.overlay_tint === "none"}
+        disabled={(disabled ?? false) || value.overlay_tint === "none"}
         value={value.overlay_opacity}
         onChange={(v) => onChange({ overlay_opacity: v })}
       />
@@ -77,7 +77,7 @@ export function OverlayControls({
         min={0}
         max={24}
         step={1}
-        disabled={disabled}
+        disabled={disabled ?? false}
         value={value.overlay_blur}
         onChange={(v) => onChange({ overlay_blur: v })}
       />
@@ -88,7 +88,7 @@ export function OverlayControls({
         min={20}
         max={150}
         step={5}
-        disabled={disabled}
+        disabled={disabled ?? false}
         value={value.background_brightness}
         onChange={(v) => onChange({ background_brightness: v })}
       />
@@ -115,7 +115,7 @@ function SliderRow({
   step: number;
   value: number;
   onChange: (value: number) => void;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 }) {
   return (
     <div className="space-y-1.5">
@@ -131,7 +131,7 @@ function SliderRow({
         min={min}
         max={max}
         step={step}
-        disabled={disabled}
+        disabled={disabled ?? false}
         value={[value]}
         onValueChange={([next]) => onChange(next ?? value)}
       />
