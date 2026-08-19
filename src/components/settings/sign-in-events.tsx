@@ -73,6 +73,39 @@ function newDraft(): Draft {
   };
 }
 
+function snapshotOf(row: SignInEventRow): Record<string, unknown> {
+  return {
+    name: row.name,
+    starts_at: row.starts_at,
+    ends_at: row.ends_at,
+    is_active: row.is_active,
+    priority: row.priority,
+    headline: row.headline,
+    description: row.description,
+    banner_text: row.banner_text,
+    banner_tone: row.banner_tone,
+    background_url: row.background_url,
+  };
+}
+
+function unusedNewDraft(): Draft {
+  const start = new Date();
+  const end = new Date(Date.now() + 7 * 86400000);
+  return {
+    id: null,
+    name: "New event",
+    starts_at: toLocalInput(start.toISOString()),
+    ends_at: toLocalInput(end.toISOString()),
+    is_active: true,
+    priority: 0,
+    headline: "",
+    description: "",
+    banner_text: "",
+    banner_tone: "info",
+    background_url: "",
+  };
+}
+
 function statusOf(draft: Draft) {
   if (!draft.id) return { label: "Unsaved", variant: "outline" as const };
   if (!draft.is_active) return { label: "Paused", variant: "outline" as const };
