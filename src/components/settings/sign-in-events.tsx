@@ -338,6 +338,17 @@ export function SignInEventsCard({
                   />
                 </div>
 
+                <OverlayControls
+                  idPrefix={`ev-${index}`}
+                  value={{
+                    overlay_tint: draft.overlay_tint,
+                    overlay_opacity: draft.overlay_opacity,
+                    overlay_blur: draft.overlay_blur,
+                    background_brightness: draft.background_brightness,
+                  }}
+                  onChange={(next) => patch(index, next)}
+                />
+
                 <div className="space-y-1.5">
                   <Label htmlFor={`evdesc-${index}`}>Description override</Label>
                   <Textarea
