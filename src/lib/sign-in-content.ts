@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export interface SignInContent {
   slug: string;
   brandName: string;
@@ -41,21 +43,21 @@ export function overlayStyles(content: Pick<SignInContent, "overlayTint" | "over
   const opacity = clamp(content.overlayOpacity, 0, 100, 70) / 100;
   const blur = clamp(content.overlayBlur, 0, 24, 0);
   const brightness = clamp(content.backgroundBrightness, 20, 150, 100) / 100;
-  const tintColor =
+  const tint =
     content.overlayTint === "light"
-      ? "255 255 255"
+      ? `rgb(255 255 255 / ${opacity})`
       : content.overlayTint === "brand"
-        ? "var(--sidebar-primary-rgb, 30 41 90)"
-        : "10 14 24";
+        ? `color-mix(in oklab, var(--sidebar-primary) ${Math.round(opacity * 100)}%, transparent)`
+        : `rgb(8 12 20 / ${opacity})`;
   return {
     image: {
       filter: `brightness(${brightness})${blur > 0 ? ` blur(${blur}px)` : ""}`,
       transform: blur > 0 ? `scale(${1 + blur / 100})` : undefined,
-    } as React.CSSProperties,
+    } as CSSProperties,
     tint:
       content.overlayTint === "none"
         ? null
-        : ({ backgroundColor: `rgb(${tintColor} / ${opacity})` } as React.CSSProperties),
+        : ({ backgroundColor: tint } as CSSProperties),
   };
 }
 
