@@ -202,16 +202,8 @@ export function SignInScreen({ content }: { content: SignInContent }) {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="captcha">
-                  Security check: what is {captcha.a} + {captcha.b}?
-                </Label>
+                <Label htmlFor="captcha">Enter the code shown</Label>
                 <div className="flex items-center gap-2">
-                  <div
-                    aria-hidden
-                    className="select-none rounded-md border border-border/70 bg-muted px-3 py-1.5 font-mono text-base tracking-[0.3em] text-foreground"
-                  >
-                    {captcha.a} + {captcha.b}
-                  </div>
                   <Input
                     id="captcha"
                     inputMode="numeric"
@@ -219,10 +211,11 @@ export function SignInScreen({ content }: { content: SignInContent }) {
                     autoComplete="off"
                     required
                     value={captchaAnswer}
-                    onChange={(e) => setCaptchaAnswer(e.target.value.replace(/[^0-9]/g, "").slice(0, 3))}
-                    placeholder="Answer"
+                    onChange={(e) => setCaptchaAnswer(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
+                    placeholder="Enter captcha"
                     className="flex-1"
                   />
+                  <CaptchaImage code={captcha} />
                   <button
                     type="button"
                     onClick={refreshCaptcha}
