@@ -328,6 +328,71 @@ export type Database = {
         }
         Relationships: []
       }
+      sign_in_page_events: {
+        Row: {
+          background_url: string | null
+          banner_enabled: boolean
+          banner_text: string | null
+          banner_tone: string
+          created_at: string
+          description: string | null
+          ends_at: string
+          headline: string | null
+          highlights: string[] | null
+          id: string
+          is_active: boolean
+          name: string
+          priority: number
+          school_id: string
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          background_url?: string | null
+          banner_enabled?: boolean
+          banner_text?: string | null
+          banner_tone?: string
+          created_at?: string
+          description?: string | null
+          ends_at: string
+          headline?: string | null
+          highlights?: string[] | null
+          id?: string
+          is_active?: boolean
+          name: string
+          priority?: number
+          school_id: string
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          background_url?: string | null
+          banner_enabled?: boolean
+          banner_text?: string | null
+          banner_tone?: string
+          created_at?: string
+          description?: string | null
+          ends_at?: string
+          headline?: string | null
+          highlights?: string[] | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          priority?: number
+          school_id?: string
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sign_in_page_events_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sign_in_pages: {
         Row: {
           background_url: string | null

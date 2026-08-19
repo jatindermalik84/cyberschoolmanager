@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useWorkspace } from "@/components/shell/workspace";
+import { SignInEventsCard } from "@/components/settings/sign-in-events";
 import { supabase } from "@/integrations/supabase/client";
 import { BANNER_TONES, bannerClasses } from "@/lib/sign-in-content";
 
@@ -302,6 +303,8 @@ function SignInPageEditor() {
           <Button onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="animate-spin" /> : <Save />} Save changes
           </Button>
+
+          <SignInEventsCard schoolId={school.id} />
         </div>
 
         <div className="xl:sticky xl:top-6 xl:h-fit">

@@ -6,7 +6,11 @@ import { SignInScreen } from "@/components/auth/sign-in-screen";
 import { supabase } from "@/integrations/supabase/client";
 import {
   DEFAULT_SIGN_IN_CONTENT,
+  applyEvent,
+  pickActiveEvent,
   rowToContent,
+  SIGN_IN_EVENT_COLUMNS,
+  type SignInEventRow,
   type SignInContent,
   type SignInPageRow,
 } from "@/lib/sign-in-content";
@@ -44,12 +48,22 @@ function SchoolAuthPage() {
       const { data } = await supabase
         .from("sign_in_pages")
         .select(
-          "slug, brand_name, logo_url, background_url, headline, description, highlights, banner_enabled, banner_text, banner_tone",
+          "school_id, slug, brand_name, logo_url, background_url, headline, description, highlights, banner_enabled, banner_text, banner_tone",
         )
         .eq("slug", school.toLowerCase())
         .maybeSingle();
       if (cancelled) return;
-      setContent(data ? rowToContent(data as SignInPageRow) : DEFAULT_SIGN_IN_CONTENT);
+      if (!data) {
+        setContent(DEFAULT_SIGN_IN_CONTENT);
+        return;
+      }
+      const base = rowToContent(data as SignInPageRow);
+      const { data: events } = await supabase
+        .from("sign_in_page_events")
+        .select(SIGN_IN_EVENT_COLUMNS)
+        .eq("school_id", (data as { school_id: string }).school_id);
+      if (cancelled) return;
+      setContent(applyEvent(base, pickActiveEvent((events ?? []) as SignInEventRow[])));
     })();
     return () => {
       cancelled = true;
