@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Eye, EyeOff, GraduationCap, Loader2, Mail, Megaphone } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Loader2, Mail, Megaphone, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -11,20 +11,37 @@ import { supabase } from "@/integrations/supabase/client";
 import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { bannerClasses, overlayStyles, type SignInContent } from "@/lib/sign-in-content";
 
+function newCaptcha() {
+  return { a: Math.floor(Math.random() * 9) + 1, b: Math.floor(Math.random() * 9) + 1 };
+}
+
 export function SignInScreen({ content }: { content: SignInContent }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [captcha, setCaptcha] = useState(() => newCaptcha());
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
   const overlay = overlayStyles(content);
+
+  const refreshCaptcha = useCallback(() => {
+    setCaptcha(newCaptcha());
+    setCaptchaAnswer("");
+  }, []);
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
+    if (captchaAnswer.trim() !== String(captcha.a + captcha.b)) {
+      toast.error("Incorrect captcha answer. Please try again.");
+      refreshCaptcha();
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) {
       toast.error(error.message);
+      refreshCaptcha();
       return;
     }
     navigate({ to: "/dashboard" });
@@ -143,6 +160,38 @@ export function SignInScreen({ content }: { content: SignInContent }) {
                   onChange={setPassword}
                   autoComplete="current-password"
                 />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="captcha">
+                  Security check: what is {captcha.a} + {captcha.b}?
+                </Label>
+                <div className="flex items-center gap-2">
+                  <div
+                    aria-hidden
+                    className="select-none rounded-md border border-border/70 bg-muted px-3 py-1.5 font-mono text-base tracking-[0.3em] text-foreground"
+                  >
+                    {captcha.a} + {captcha.b}
+                  </div>
+                  <Input
+                    id="captcha"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    required
+                    value={captchaAnswer}
+                    onChange={(e) => setCaptchaAnswer(e.target.value.replace(/[^0-9]/g, "").slice(0, 3))}
+                    placeholder="Answer"
+                    className="flex-1"
+                  />
+                  <button
+                    type="button"
+                    onClick={refreshCaptcha}
+                    aria-label="Get a new captcha"
+                    className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border/70 text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <RefreshCw className="size-4" />
+                  </button>
+                </div>
               </div>
               <Button type="submit" className="w-full" disabled={busy}>
                 {busy ? <Loader2 className="animate-spin" /> : <Mail />} Sign in
