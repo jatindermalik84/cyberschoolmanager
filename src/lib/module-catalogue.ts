@@ -7,6 +7,7 @@ export interface ModulePage {
   area: ModuleArea;
   label: string;
   pageKey: string;
+  route?: string;
 }
 
 export interface ModuleDef {

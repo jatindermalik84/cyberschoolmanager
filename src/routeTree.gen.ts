@@ -36,6 +36,7 @@ import { Route as AuthenticatedStudentsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedTeacherDiaryRouteImport } from './routes/_authenticated/teacher-diary'
 import { Route as AuthenticatedTimetableRouteImport } from './routes/_authenticated/timetable'
 import { Route as AuthenticatedTransportRouteImport } from './routes/_authenticated/transport'
+import { Route as AuthSchoolRouteImport } from './routes/auth_.$school'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedMModulePageRouteImport } from './routes/_authenticated/m.$module.$page'
 
@@ -178,6 +179,11 @@ const AuthenticatedTransportRoute = AuthenticatedTransportRouteImport.update({
   path: '/transport',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthSchoolRoute = AuthSchoolRouteImport.update({
+  id: '/auth_/$school',
+  path: '/auth/$school',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedSettingsIndexRoute =
   AuthenticatedSettingsIndexRouteImport.update({
     id: '/settings/',
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
+  '/auth/$school': typeof AuthSchoolRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
+  '/auth/$school': typeof AuthSchoolRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/_authenticated/teacher-diary': typeof AuthenticatedTeacherDiaryRoute
   '/_authenticated/timetable': typeof AuthenticatedTimetableRoute
   '/_authenticated/transport': typeof AuthenticatedTransportRoute
+  '/auth_/$school': typeof AuthSchoolRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/teacher-diary'
     | '/timetable'
     | '/transport'
+    | '/auth/$school'
     | '/settings/'
     | '/m/$module/$page'
   fileRoutesByTo: FileRoutesByTo
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/teacher-diary'
     | '/timetable'
     | '/transport'
+    | '/auth/$school'
     | '/settings'
     | '/m/$module/$page'
   id:
@@ -373,6 +384,7 @@ export interface FileRouteTypes {
     | '/_authenticated/teacher-diary'
     | '/_authenticated/timetable'
     | '/_authenticated/transport'
+    | '/auth_/$school'
     | '/_authenticated/settings/'
     | '/_authenticated/m/$module/$page'
   fileRoutesById: FileRoutesById
@@ -382,6 +394,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  AuthSchoolRoute: typeof AuthSchoolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -575,6 +588,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTransportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth_/$school': {
+      id: '/auth_/$school'
+      path: '/auth/$school'
+      fullPath: '/auth/$school'
+      preLoaderRoute: typeof AuthSchoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
       path: '/settings'
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  AuthSchoolRoute: AuthSchoolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
