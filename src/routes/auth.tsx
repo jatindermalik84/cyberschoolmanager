@@ -173,9 +173,9 @@ function AuthPage() {
               </TabsList>
 
               <TabsContent value="signin" className="mt-4">
-                <form className="space-y-4" onSubmit={handleSignIn}>
+              <form className="space-y-4" onSubmit={handleSignIn}>
                   <div className="space-y-1.5">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">Username</Label>
                     <Input
                       id="email"
                       type="email"
@@ -183,7 +183,7 @@ function AuthPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@school.edu.in"
+                      placeholder="Enter username"
                     />
                   </div>
                   <div className="space-y-1.5">
