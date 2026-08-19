@@ -9,13 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import csmLogo from "@/assets/csm-logo.png.asset.json";
-import { bannerClasses, type SignInContent } from "@/lib/sign-in-content";
+import { bannerClasses, overlayStyles, type SignInContent } from "@/lib/sign-in-content";
 
 export function SignInScreen({ content }: { content: SignInContent }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const overlay = overlayStyles(content);
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
@@ -53,9 +54,12 @@ export function SignInScreen({ content }: { content: SignInContent }) {
               aria-hidden
               src={content.backgroundUrl}
               alt=""
-              className="pointer-events-none absolute inset-0 size-full object-cover opacity-25"
+              style={overlay.image}
+              className="pointer-events-none absolute inset-0 size-full object-cover"
             />
-            <div aria-hidden className="pointer-events-none absolute inset-0 bg-sidebar/70" />
+            {overlay.tint ? (
+              <div aria-hidden style={overlay.tint} className="pointer-events-none absolute inset-0" />
+            ) : null}
           </>
         ) : null}
         <div
