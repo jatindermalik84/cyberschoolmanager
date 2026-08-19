@@ -11,6 +11,10 @@ import { supabase } from "@/integrations/supabase/client";
 import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { bannerClasses, overlayStyles, type SignInContent } from "@/lib/sign-in-content";
 
+function newCaptcha() {
+  return { a: Math.floor(Math.random() * 9) + 1, b: Math.floor(Math.random() * 9) + 1 };
+}
+
 export function SignInScreen({ content }: { content: SignInContent }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
