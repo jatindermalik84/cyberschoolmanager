@@ -14,8 +14,9 @@ import { useWorkspace } from "@/components/shell/workspace";
 import { SignInEventsCard } from "@/components/settings/sign-in-events";
 import { SignInAuditLogCard } from "@/components/settings/sign-in-audit-log";
 import { ImageUploadField } from "@/components/settings/image-upload-field";
+import { OverlayControls, overlayPreviewStyles } from "@/components/settings/overlay-controls";
 import { supabase } from "@/integrations/supabase/client";
-import { BANNER_TONES, bannerClasses } from "@/lib/sign-in-content";
+import { BANNER_TONES, DEFAULT_OVERLAY, bannerClasses, type OverlayTint } from "@/lib/sign-in-content";
 import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
 
 const title = "Sign-in page content | Cyber School Manager";
@@ -48,6 +49,10 @@ interface FormState {
   banner_text: string;
   banner_tone: string;
   is_published: boolean;
+  overlay_tint: OverlayTint;
+  overlay_opacity: number;
+  overlay_blur: number;
+  background_brightness: number;
 }
 
 function SignInPageEditor() {
@@ -84,6 +89,10 @@ function SignInPageEditor() {
               banner_text: data.banner_text,
               banner_tone: data.banner_tone,
               is_published: data.is_published,
+              overlay_tint: data.overlay_tint,
+              overlay_opacity: data.overlay_opacity,
+              overlay_blur: data.overlay_blur,
+              background_brightness: data.background_brightness,
             }
           : null,
       );
@@ -99,6 +108,10 @@ function SignInPageEditor() {
         banner_text: data?.banner_text ?? "",
         banner_tone: data?.banner_tone ?? "info",
         is_published: data?.is_published ?? true,
+        overlay_tint: (data?.overlay_tint as OverlayTint | undefined) ?? DEFAULT_OVERLAY.overlayTint,
+        overlay_opacity: data?.overlay_opacity ?? DEFAULT_OVERLAY.overlayOpacity,
+        overlay_blur: data?.overlay_blur ?? DEFAULT_OVERLAY.overlayBlur,
+        background_brightness: data?.background_brightness ?? DEFAULT_OVERLAY.backgroundBrightness,
       });
       setLoading(false);
     })();
@@ -136,6 +149,10 @@ function SignInPageEditor() {
       banner_text: form.banner_text.trim() || null,
       banner_tone: form.banner_tone,
       is_published: form.is_published,
+      overlay_tint: form.overlay_tint,
+      overlay_opacity: form.overlay_opacity,
+      overlay_blur: form.overlay_blur,
+      background_brightness: form.background_brightness,
     };
     const { error } = await supabase
       .from("sign_in_pages")
@@ -160,6 +177,13 @@ function SignInPageEditor() {
     patch({ slug });
     toast.success("Sign-in page updated.");
   }
+
+  const preview = overlayPreviewStyles({
+    overlay_tint: form?.overlay_tint ?? DEFAULT_OVERLAY.overlayTint,
+    overlay_opacity: form?.overlay_opacity ?? DEFAULT_OVERLAY.overlayOpacity,
+    overlay_blur: form?.overlay_blur ?? DEFAULT_OVERLAY.overlayBlur,
+    background_brightness: form?.background_brightness ?? DEFAULT_OVERLAY.backgroundBrightness,
+  });
 
   if (!school || loading || !form) {
     return (
@@ -261,6 +285,18 @@ function SignInPageEditor() {
                 defaultAspect="16-9"
                 hint="Wide photo, at least 1600px across. Max 5 MB."
               />
+              <div className="sm:col-span-2">
+                <OverlayControls
+                  idPrefix="page"
+                  value={{
+                    overlay_tint: form.overlay_tint,
+                    overlay_opacity: form.overlay_opacity,
+                    overlay_blur: form.overlay_blur,
+                    background_brightness: form.background_brightness,
+                  }}
+                  onChange={(next) => patch(next)}
+                />
+              </div>
             </CardContent>
           </Card>
 
@@ -356,7 +392,21 @@ function SignInPageEditor() {
 
         <div className="xl:sticky xl:top-6 xl:h-fit">
           <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Live preview</p>
-          <div className="overflow-hidden rounded-xl border border-border/70 bg-sidebar p-6 text-sidebar-foreground">
+          <div className="relative overflow-hidden rounded-xl border border-border/70 bg-sidebar p-6 text-sidebar-foreground">
+            {form.background_url ? (
+              <>
+                <img
+                  aria-hidden
+                  src={form.background_url}
+                  alt=""
+                  style={preview.image}
+                  className="pointer-events-none absolute inset-0 size-full object-cover"
+                />
+                {preview.tint ? (
+                  <div aria-hidden style={preview.tint} className="pointer-events-none absolute inset-0" />
+                ) : null}
+              </>
+            ) : null}
             <div className="relative space-y-5">
               <div className="flex items-center gap-2.5">
                 {form.logo_url ? (
