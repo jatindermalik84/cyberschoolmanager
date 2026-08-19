@@ -137,16 +137,7 @@ export function SignInScreen({ content }: { content: SignInContent }) {
                 />
               </div>
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="text-xs text-primary underline-offset-4 hover:underline"
-                  >
-                    Forgot password?
-                  </button>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <PasswordInput
                   id="password"
                   value={password}
@@ -157,6 +148,15 @@ export function SignInScreen({ content }: { content: SignInContent }) {
               <Button type="submit" className="w-full" disabled={busy}>
                 {busy ? <Loader2 className="animate-spin" /> : <Mail />} Sign in
               </Button>
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="text-xs text-primary underline-offset-4 hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
             </form>
           </CardContent>
         </Card>
