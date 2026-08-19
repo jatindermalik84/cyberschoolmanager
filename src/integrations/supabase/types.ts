@@ -328,6 +328,68 @@ export type Database = {
         }
         Relationships: []
       }
+      sign_in_pages: {
+        Row: {
+          background_url: string | null
+          banner_enabled: boolean
+          banner_text: string | null
+          banner_tone: string
+          brand_name: string
+          created_at: string
+          description: string
+          headline: string
+          highlights: string[]
+          id: string
+          is_published: boolean
+          logo_url: string | null
+          school_id: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          background_url?: string | null
+          banner_enabled?: boolean
+          banner_text?: string | null
+          banner_tone?: string
+          brand_name: string
+          created_at?: string
+          description?: string
+          headline?: string
+          highlights?: string[]
+          id?: string
+          is_published?: boolean
+          logo_url?: string | null
+          school_id: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          background_url?: string | null
+          banner_enabled?: boolean
+          banner_text?: string | null
+          banner_tone?: string
+          brand_name?: string
+          created_at?: string
+          description?: string
+          headline?: string
+          highlights?: string[]
+          id?: string
+          is_published?: boolean
+          logo_url?: string | null
+          school_id?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sign_in_pages_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: true
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       staff: {
         Row: {
           contact_phone: string | null
