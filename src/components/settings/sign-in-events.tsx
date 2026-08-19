@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
 import {
   BANNER_TONES,
   SIGN_IN_EVENT_COLUMNS,
@@ -86,8 +87,15 @@ function statusOf(draft: Draft) {
     : { label: "Ended", variant: "outline" as const };
 }
 
-export function SignInEventsCard({ schoolId }: { schoolId: string }) {
+export function SignInEventsCard({
+  schoolId,
+  onLogged,
+}: {
+  schoolId: string;
+  onLogged?: () => void;
+}) {
   const [drafts, setDrafts] = useState<Draft[] | null>(null);
+  const [originals, setOriginals] = useState<Record<string, Record<string, unknown>>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -100,7 +108,9 @@ export function SignInEventsCard({ schoolId }: { schoolId: string }) {
         .order("starts_at", { ascending: true });
       if (cancelled) return;
       if (error) toast.error(error.message);
-      setDrafts(((data ?? []) as SignInEventRow[]).map(rowToDraft));
+      const rows = (data ?? []) as SignInEventRow[];
+      setDrafts(rows.map(rowToDraft));
+      setOriginals(Object.fromEntries(rows.map((row) => [row.id, snapshotOf(row)])));
     })();
     return () => {
       cancelled = true;
@@ -157,6 +167,17 @@ export function SignInEventsCard({ schoolId }: { schoolId: string }) {
       return;
     }
     patch(index, rowToDraft(data as SignInEventRow));
+    const saved = data as SignInEventRow;
+    const before = draft.id ? originals[draft.id] ?? null : null;
+    void logSignInAudit({
+      schoolId,
+      entity: "event",
+      entityId: saved.id,
+      entityLabel: saved.name,
+      action: draft.id ? "updated" : "created",
+      changedFields: diffFields(before, snapshotOf(saved)),
+    }).then(() => onLogged?.());
+    setOriginals((prev) => ({ ...prev, [saved.id]: snapshotOf(saved) }));
     toast.success("Event schedule saved.");
   }
 
@@ -170,6 +191,13 @@ export function SignInEventsCard({ schoolId }: { schoolId: string }) {
         return;
       }
       toast.success("Event removed.");
+      void logSignInAudit({
+        schoolId,
+        entity: "event",
+        entityId: draft.id,
+        entityLabel: draft.name,
+        action: "deleted",
+      }).then(() => onLogged?.());
     }
     setDrafts((prev) => (prev ? prev.filter((_, i) => i !== index) : prev));
   }
