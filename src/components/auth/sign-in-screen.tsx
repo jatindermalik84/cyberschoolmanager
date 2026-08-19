@@ -17,6 +17,14 @@ function newCaptcha() {
 
 const CAPTCHA_COLORS = ["#2563eb", "#dc2626", "#16a34a", "#ea580c", "#7c3aed", "#0891b2"];
 
+/** Usernames without an "@" are resolved against this domain. */
+const DEFAULT_USERNAME_DOMAIN = "cybrain.co.in";
+
+function toLoginEmail(username: string) {
+  const value = username.trim();
+  return value.includes("@") ? value : `${value}@${DEFAULT_USERNAME_DOMAIN}`;
+}
+
 /** Renders the captcha code as distorted, multi-coloured digits with noise lines. */
 function CaptchaImage({ code }: { code: string }) {
   const digits = code.split("");
@@ -77,7 +85,10 @@ export function SignInScreen({ content }: { content: SignInContent }) {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: toLoginEmail(email),
+      password,
+    });
     setBusy(false);
     if (error) {
       toast.error(error.message);
@@ -93,6 +104,7 @@ export function SignInScreen({ content }: { content: SignInContent }) {
       return;
     }
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(toLoginEmail(email), {
       redirectTo: `${window.location.origin}/reset-password`,
     });
     if (error) {
@@ -184,8 +196,8 @@ export function SignInScreen({ content }: { content: SignInContent }) {
                 <Label htmlFor="email">Username</Label>
                 <Input
                   id="email"
-                  type="email"
-                  autoComplete="email"
+                  type="text"
+                  autoComplete="username"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
