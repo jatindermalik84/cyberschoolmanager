@@ -46,28 +46,29 @@ export function SignInScreen({ content }: { content: SignInContent }) {
   }
 
   return (
-    <div className="grid min-h-svh lg:grid-cols-[1.1fr_1fr]">
-      <aside className="relative hidden flex-col justify-between overflow-hidden bg-sidebar p-10 text-sidebar-foreground lg:flex">
-        {content.backgroundUrl ? (
-          <>
-            <img
-              aria-hidden
-              src={content.backgroundUrl}
-              alt=""
-              style={overlay.image}
-              className="pointer-events-none absolute inset-0 size-full object-cover"
-            />
-            {overlay.tint ? (
-              <div aria-hidden style={overlay.tint} className="pointer-events-none absolute inset-0" />
-            ) : null}
-          </>
-        ) : null}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-sidebar-primary/20 blur-3xl"
-        />
+    <div className="relative flex min-h-svh flex-col overflow-hidden bg-sidebar text-sidebar-foreground">
+      {content.backgroundUrl ? (
+        <>
+          <img
+            aria-hidden
+            src={content.backgroundUrl}
+            alt=""
+            style={overlay.image}
+            className="pointer-events-none fixed inset-0 size-full object-cover"
+          />
+          {overlay.tint ? (
+            <div aria-hidden style={overlay.tint} className="pointer-events-none fixed inset-0" />
+          ) : null}
+        </>
+      ) : null}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-sidebar-primary/20 blur-3xl"
+      />
 
-        <div className="relative flex items-center gap-2.5">
+      <div className="relative grid flex-1 gap-10 p-6 lg:grid-cols-[1.1fr_1fr] lg:p-10">
+        <aside className="hidden flex-col justify-between gap-10 lg:flex">
+        <div className="flex items-center gap-2.5">
           {content.logoUrl ? (
             <img
               src={content.logoUrl}
@@ -84,7 +85,7 @@ export function SignInScreen({ content }: { content: SignInContent }) {
           </span>
         </div>
 
-        <div className="relative max-w-md space-y-5">
+        <div className="max-w-md space-y-5">
           {content.bannerEnabled && content.bannerText ? (
             <div
               className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs ${bannerClasses(content.bannerTone)}`}
@@ -111,16 +112,10 @@ export function SignInScreen({ content }: { content: SignInContent }) {
           ) : null}
         </div>
 
-        <div className="relative space-y-3">
-          <img src={csmLogo.url} alt="Cyber School Manager logo" className="h-12 w-auto" />
-          <p className="text-xs text-sidebar-foreground/50">
-            &copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved. Cyber
-            School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
-          </p>
-        </div>
+        <div />
       </aside>
 
-      <main className="flex items-center justify-center bg-background p-6">
+      <main className="flex items-center justify-center">
         <Card className="w-full max-w-sm border-border/70 shadow-sm">
           <CardHeader className="space-y-1.5">
             <CardTitle className="font-display text-2xl">Sign in to your school</CardTitle>
@@ -165,6 +160,15 @@ export function SignInScreen({ content }: { content: SignInContent }) {
           </CardContent>
         </Card>
       </main>
+      </div>
+
+      <footer className="relative flex flex-col items-center gap-2 px-6 py-6 text-center sm:flex-row sm:justify-center sm:gap-4 sm:text-left">
+        <img src={csmLogo.url} alt="Cyber School Manager logo" className="h-10 w-auto" />
+        <p className="max-w-3xl text-xs text-sidebar-foreground/70">
+          &copy; {new Date().getFullYear()} Cybrain Software Solutions&reg;. All rights reserved. Cyber
+          School Manager&trade; and the CSM logo are trademarks of Cybrain Software Solutions.
+        </p>
+      </footer>
     </div>
   );
 }
