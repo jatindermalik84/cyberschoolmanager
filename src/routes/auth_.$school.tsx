@@ -48,7 +48,7 @@ function SchoolAuthPage() {
       const { data } = await supabase
         .from("sign_in_pages")
         .select(
-          "school_id, slug, brand_name, logo_url, background_url, headline, description, highlights, banner_enabled, banner_text, banner_tone",
+          "school_id, slug, brand_name, logo_url, background_url, headline, description, highlights, banner_enabled, banner_text, banner_tone, overlay_tint, overlay_opacity, overlay_blur, background_brightness",
         )
         .eq("slug", school.toLowerCase())
         .maybeSingle();
