@@ -38,6 +38,7 @@ import { Route as AuthenticatedTimetableRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTransportRouteImport } from './routes/_authenticated/transport'
 import { Route as AuthSchoolRouteImport } from './routes/auth_.$school'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedSettingsSignInPageRouteImport } from './routes/_authenticated/settings/sign-in-page'
 import { Route as AuthenticatedMModulePageRouteImport } from './routes/_authenticated/m.$module.$page'
 
 const IndexRoute = IndexRouteImport.update({
@@ -190,6 +191,12 @@ const AuthenticatedSettingsIndexRoute =
     path: '/settings/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSettingsSignInPageRoute =
+  AuthenticatedSettingsSignInPageRouteImport.update({
+    id: '/settings/sign-in-page',
+    path: '/settings/sign-in-page',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMModulePageRoute =
   AuthenticatedMModulePageRouteImport.update({
     id: '/m/$module/$page',
@@ -225,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
   '/auth/$school': typeof AuthSchoolRoute
+  '/settings/sign-in-page': typeof AuthenticatedSettingsSignInPageRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -256,6 +264,7 @@ export interface FileRoutesByTo {
   '/timetable': typeof AuthenticatedTimetableRoute
   '/transport': typeof AuthenticatedTransportRoute
   '/auth/$school': typeof AuthSchoolRoute
+  '/settings/sign-in-page': typeof AuthenticatedSettingsSignInPageRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -289,6 +298,7 @@ export interface FileRoutesById {
   '/_authenticated/timetable': typeof AuthenticatedTimetableRoute
   '/_authenticated/transport': typeof AuthenticatedTransportRoute
   '/auth_/$school': typeof AuthSchoolRoute
+  '/_authenticated/settings/sign-in-page': typeof AuthenticatedSettingsSignInPageRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/m/$module/$page': typeof AuthenticatedMModulePageRoute
 }
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/timetable'
     | '/transport'
     | '/auth/$school'
+    | '/settings/sign-in-page'
     | '/settings/'
     | '/m/$module/$page'
   fileRoutesByTo: FileRoutesByTo
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/timetable'
     | '/transport'
     | '/auth/$school'
+    | '/settings/sign-in-page'
     | '/settings'
     | '/m/$module/$page'
   id:
@@ -385,6 +397,7 @@ export interface FileRouteTypes {
     | '/_authenticated/timetable'
     | '/_authenticated/transport'
     | '/auth_/$school'
+    | '/_authenticated/settings/sign-in-page'
     | '/_authenticated/settings/'
     | '/_authenticated/m/$module/$page'
   fileRoutesById: FileRoutesById
@@ -602,6 +615,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings/sign-in-page': {
+      id: '/_authenticated/settings/sign-in-page'
+      path: '/settings/sign-in-page'
+      fullPath: '/settings/sign-in-page'
+      preLoaderRoute: typeof AuthenticatedSettingsSignInPageRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/m/$module/$page': {
       id: '/_authenticated/m/$module/$page'
       path: '/m/$module/$page'
@@ -636,6 +656,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTeacherDiaryRoute: typeof AuthenticatedTeacherDiaryRoute
   AuthenticatedTimetableRoute: typeof AuthenticatedTimetableRoute
   AuthenticatedTransportRoute: typeof AuthenticatedTransportRoute
+  AuthenticatedSettingsSignInPageRoute: typeof AuthenticatedSettingsSignInPageRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
   AuthenticatedMModulePageRoute: typeof AuthenticatedMModulePageRoute
 }
@@ -664,6 +685,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTeacherDiaryRoute: AuthenticatedTeacherDiaryRoute,
   AuthenticatedTimetableRoute: AuthenticatedTimetableRoute,
   AuthenticatedTransportRoute: AuthenticatedTransportRoute,
+  AuthenticatedSettingsSignInPageRoute: AuthenticatedSettingsSignInPageRoute,
   AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   AuthenticatedMModulePageRoute: AuthenticatedMModulePageRoute,
 }

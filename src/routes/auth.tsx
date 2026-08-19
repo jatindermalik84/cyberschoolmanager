@@ -1,14 +1,8 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Eye, EyeOff, GraduationCap, Loader2, Mail } from "lucide-react";
-import { toast } from "sonner";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { SignInScreen } from "@/components/auth/sign-in-screen";
 import { supabase } from "@/integrations/supabase/client";
-import csmLogo from "@/assets/csm-logo.png.asset.json";
+import { DEFAULT_SIGN_IN_CONTENT } from "@/lib/sign-in-content";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
