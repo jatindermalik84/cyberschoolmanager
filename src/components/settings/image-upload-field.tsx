@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
-import { ImageUp, Loader2, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Crop, ImageUp, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ImageCropDialog } from "@/components/settings/image-crop-dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const TEN_YEARS = 60 * 60 * 24 * 365 * 10;
@@ -18,27 +19,39 @@ interface ImageUploadFieldProps {
   value: string;
   onChange: (url: string) => void;
   hint?: string;
+  /** Default crop shape offered in the adjust dialog. */
+  defaultAspect?: string;
 }
 
-export function ImageUploadField({ id, label, schoolId, folder, value, onChange, hint }: ImageUploadFieldProps) {
+export function ImageUploadField({
+  id,
+  label,
+  schoolId,
+  folder,
+  value,
+  onChange,
+  hint,
+  defaultAspect = "free",
+}: ImageUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const [cropOpen, setCropOpen] = useState(false);
+  const [mimeType, setMimeType] = useState("image/png");
 
-  async function handleFile(file: File) {
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please choose an image file.");
-      return;
-    }
-    if (file.size > MAX_BYTES) {
-      toast.error("Image must be smaller than 5 MB.");
-      return;
-    }
+  useEffect(() => {
+    return () => {
+      if (cropSrc?.startsWith("blob:")) URL.revokeObjectURL(cropSrc);
+    };
+  }, [cropSrc]);
+
+  async function upload(blob: Blob, type: string) {
     setUploading(true);
-    const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+    const ext = type === "image/jpeg" ? "jpg" : "png";
     const path = `${schoolId}/${folder}-${Date.now()}.${ext}`;
     const { error } = await supabase.storage
       .from("school-branding")
-      .upload(path, file, { cacheControl: "31536000", upsert: true, contentType: file.type });
+      .upload(path, blob, { cacheControl: "31536000", upsert: true, contentType: type });
     if (error) {
       setUploading(false);
       toast.error(error.message);
@@ -53,7 +66,28 @@ export function ImageUploadField({ id, label, schoolId, folder, value, onChange,
       return;
     }
     onChange(data.signedUrl);
-    toast.success(`${label} uploaded. Remember to save changes.`);
+    toast.success(`${label} updated. Remember to save changes.`);
+  }
+
+  function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > MAX_BYTES) {
+      toast.error("Image must be smaller than 5 MB.");
+      return;
+    }
+    setMimeType(file.type === "image/jpeg" ? "image/jpeg" : "image/png");
+    setCropSrc(URL.createObjectURL(file));
+    setCropOpen(true);
+  }
+
+  function adjustExisting() {
+    if (!value) return;
+    setMimeType("image/png");
+    setCropSrc(value);
+    setCropOpen(true);
   }
 
   return (
@@ -78,12 +112,17 @@ export function ImageUploadField({ id, label, schoolId, folder, value, onChange,
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 e.target.value = "";
-                if (file) void handleFile(file);
+                if (file) handleFile(file);
               }}
             />
             <Button type="button" size="sm" variant="secondary" disabled={uploading} onClick={() => inputRef.current?.click()}>
               {uploading ? <Loader2 className="animate-spin" /> : <ImageUp />} Upload
             </Button>
+            {value ? (
+              <Button type="button" size="sm" variant="secondary" disabled={uploading} onClick={adjustExisting}>
+                <Crop /> Crop & position
+              </Button>
+            ) : null}
             {value ? (
               <Button type="button" size="sm" variant="ghost" onClick={() => onChange("")}>
                 <X /> Remove
@@ -93,6 +132,18 @@ export function ImageUploadField({ id, label, schoolId, folder, value, onChange,
           {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
         </div>
       </div>
+
+      <ImageCropDialog
+        open={cropOpen}
+        onOpenChange={setCropOpen}
+        src={cropSrc}
+        title={`Crop & position — ${label}`}
+        defaultAspect={defaultAspect}
+        mimeType={mimeType}
+        onCropped={async (blob) => {
+          await upload(blob, mimeType);
+        }}
+      />
     </div>
   );
 }
