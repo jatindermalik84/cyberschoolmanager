@@ -702,6 +702,12 @@ export const MODULE_CATALOGUE: ModuleDef[] = [
     allowedRoles: ["super_admin", "school_owner", "school_admin", "principal"],
     pages: [
       { area: "setup", label: "Report Templates", pageKey: "frmReportTemplates" },
+      {
+        area: "setup",
+        label: "Sign-in Page Content",
+        pageKey: "signInPageContent",
+        route: "/settings/sign-in-page",
+      },
       { area: "setup", label: "Application Approval Settings", pageKey: "frmApplicationApprovalSettings" },
       { area: "setup", label: "General Settings", pageKey: "GeneralSettings" },
       { area: "setup", label: "Assign App Menu To User", pageKey: "frmTeacherAppMenueRights" },
