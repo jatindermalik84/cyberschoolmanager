@@ -12,7 +12,47 @@ import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { bannerClasses, overlayStyles, type SignInContent } from "@/lib/sign-in-content";
 
 function newCaptcha() {
-  return { a: Math.floor(Math.random() * 9) + 1, b: Math.floor(Math.random() * 9) + 1 };
+  return Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join("");
+}
+
+const CAPTCHA_COLORS = ["#2563eb", "#dc2626", "#16a34a", "#ea580c", "#7c3aed", "#0891b2"];
+
+/** Renders the captcha code as distorted, multi-coloured digits with noise lines. */
+function CaptchaImage({ code }: { code: string }) {
+  const digits = code.split("");
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 130 40"
+      className="h-9 w-[130px] select-none rounded-md border border-border/70 bg-muted"
+    >
+      {[0, 1, 2].map((i) => (
+        <path
+          key={i}
+          d={`M0 ${8 + i * 11} Q 32 ${2 + ((i * 13) % 30)} 65 ${20 + ((i * 7) % 12)} T 130 ${6 + i * 12}`}
+          stroke="currentColor"
+          className="text-muted-foreground/40"
+          fill="none"
+          strokeWidth="1"
+        />
+      ))}
+      {digits.map((d, i) => (
+        <text
+          key={i}
+          x={14 + i * 24}
+          y={28 + (i % 2 === 0 ? -2 : 2)}
+          fill={CAPTCHA_COLORS[(i + Number(d)) % CAPTCHA_COLORS.length]}
+          fontSize={22 + ((Number(d) + i) % 5)}
+          fontFamily="Georgia, serif"
+          fontStyle={i % 2 === 0 ? "italic" : "normal"}
+          fontWeight="700"
+          transform={`rotate(${((Number(d) % 5) - 2) * 8} ${14 + i * 24} 24)`}
+        >
+          {d}
+        </text>
+      ))}
+    </svg>
+  );
 }
 
 export function SignInScreen({ content }: { content: SignInContent }) {
@@ -31,7 +71,7 @@ export function SignInScreen({ content }: { content: SignInContent }) {
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
-    if (captchaAnswer.trim() !== String(captcha.a + captcha.b)) {
+    if (captchaAnswer.trim() !== captcha) {
       toast.error("Incorrect captcha answer. Please try again.");
       refreshCaptcha();
       return;
