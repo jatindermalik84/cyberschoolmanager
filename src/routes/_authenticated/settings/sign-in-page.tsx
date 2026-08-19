@@ -248,7 +248,8 @@ function SignInPageEditor() {
                 folder="logo"
                 value={form.logo_url}
                 onChange={(url) => patch({ logo_url: url })}
-                hint="PNG or SVG with transparent background works best. Max 5 MB."
+                defaultAspect="1"
+                hint="PNG or SVG with transparent background works best. Crop to a square for best fit. Max 5 MB."
               />
               <ImageUploadField
                 id="bg"
@@ -257,6 +258,7 @@ function SignInPageEditor() {
                 folder="background"
                 value={form.background_url}
                 onChange={(url) => patch({ background_url: url })}
+                defaultAspect="16-9"
                 hint="Wide photo, at least 1600px across. Max 5 MB."
               />
             </CardContent>

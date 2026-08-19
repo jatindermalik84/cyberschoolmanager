@@ -307,6 +307,7 @@ export function SignInEventsCard({
                     label="Background image"
                     schoolId={schoolId}
                     folder="event-background"
+                    defaultAspect="16-9"
                     value={draft.background_url}
                     onChange={(url) => patch(index, { background_url: url })}
                   />
