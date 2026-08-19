@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { Copy, ExternalLink, Loader2, Megaphone, Plus, Save, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Loader2, Megaphone, Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -120,10 +120,6 @@ function SignInPageEditor() {
     };
   }, [school]);
 
-  const signInUrl = useMemo(() => {
-    if (typeof window === "undefined" || !form) return "";
-    return `${window.location.origin}/auth/${form.slug}`;
-  }, [form]);
 
   function patch(next: Partial<FormState>) {
     setForm((prev) => (prev ? { ...prev, ...next } : prev));
@@ -206,55 +202,6 @@ function SignInPageEditor() {
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
         <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Your sign-in link</CardTitle>
-              <CardDescription>Share this link with your school community.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="slug">Link name</Label>
-                <Input
-                  id="slug"
-                  value={form.slug}
-                  onChange={(e) => patch({ slug: e.target.value })}
-                  placeholder="gurukul"
-                />
-              </div>
-              <div className="flex flex-wrap items-center gap-2 rounded-md bg-muted px-3 py-2 text-xs">
-                <code className="truncate font-mono">{signInUrl}</code>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => {
-                    void navigator.clipboard.writeText(signInUrl);
-                    toast.success("Link copied.");
-                  }}
-                >
-                  <Copy /> Copy
-                </Button>
-                <Button type="button" size="sm" variant="ghost" asChild>
-                  <a href={signInUrl} target="_blank" rel="noreferrer">
-                    <ExternalLink /> Open
-                  </a>
-                </Button>
-              </div>
-              <div className="flex items-center justify-between rounded-md border border-border/70 px-3 py-2">
-                <div>
-                  <p className="text-sm font-medium">Published</p>
-                  <p className="text-xs text-muted-foreground">
-                    When off, visitors see the standard Cyber School Manager sign-in screen.
-                  </p>
-                </div>
-                <Switch
-                  checked={form.is_published}
-                  onCheckedChange={(v) => patch({ is_published: v })}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Branding</CardTitle>
