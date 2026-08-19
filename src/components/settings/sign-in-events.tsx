@@ -12,9 +12,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { ImageUploadField } from "@/components/settings/image-upload-field";
+import { OverlayControls } from "@/components/settings/overlay-controls";
 import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
 import {
   BANNER_TONES,
+  DEFAULT_OVERLAY,
+  type OverlayTint,
   SIGN_IN_EVENT_COLUMNS,
   isEventRunning,
   type SignInEventRow,
@@ -38,6 +41,10 @@ interface Draft {
   banner_text: string;
   banner_tone: string;
   background_url: string;
+  overlay_tint: OverlayTint;
+  overlay_opacity: number;
+  overlay_blur: number;
+  background_brightness: number;
 }
 
 function rowToDraft(row: SignInEventRow): Draft {
@@ -53,6 +60,10 @@ function rowToDraft(row: SignInEventRow): Draft {
     banner_text: row.banner_text ?? "",
     banner_tone: row.banner_tone,
     background_url: row.background_url ?? "",
+    overlay_tint: (row.overlay_tint as OverlayTint | null) ?? DEFAULT_OVERLAY.overlayTint,
+    overlay_opacity: row.overlay_opacity ?? DEFAULT_OVERLAY.overlayOpacity,
+    overlay_blur: row.overlay_blur ?? DEFAULT_OVERLAY.overlayBlur,
+    background_brightness: row.background_brightness ?? DEFAULT_OVERLAY.backgroundBrightness,
   };
 }
 
@@ -71,6 +82,12 @@ function newDraft(): Draft {
     banner_text: "",
     banner_tone: "info",
     background_url: "",
+    ...{
+      overlay_tint: DEFAULT_OVERLAY.overlayTint,
+      overlay_opacity: DEFAULT_OVERLAY.overlayOpacity,
+      overlay_blur: DEFAULT_OVERLAY.overlayBlur,
+      background_brightness: DEFAULT_OVERLAY.backgroundBrightness,
+    },
   };
 }
 
@@ -86,6 +103,10 @@ function snapshotOf(row: SignInEventRow): Record<string, unknown> {
     banner_text: row.banner_text,
     banner_tone: row.banner_tone,
     background_url: row.background_url,
+    overlay_tint: row.overlay_tint,
+    overlay_opacity: row.overlay_opacity,
+    overlay_blur: row.overlay_blur,
+    background_brightness: row.background_brightness,
   };
 }
 
@@ -164,6 +185,10 @@ export function SignInEventsCard({
       banner_text: draft.banner_text.trim() || null,
       banner_tone: draft.banner_tone,
       background_url: draft.background_url.trim() || null,
+      overlay_tint: draft.overlay_tint,
+      overlay_opacity: draft.overlay_opacity,
+      overlay_blur: draft.overlay_blur,
+      background_brightness: draft.background_brightness,
     };
     const { data, error } = draft.id
       ? await supabase
@@ -312,6 +337,17 @@ export function SignInEventsCard({
                     onChange={(url) => patch(index, { background_url: url })}
                   />
                 </div>
+
+                <OverlayControls
+                  idPrefix={`ev-${index}`}
+                  value={{
+                    overlay_tint: draft.overlay_tint,
+                    overlay_opacity: draft.overlay_opacity,
+                    overlay_blur: draft.overlay_blur,
+                    background_brightness: draft.background_brightness,
+                  }}
+                  onChange={(next) => patch(index, next)}
+                />
 
                 <div className="space-y-1.5">
                   <Label htmlFor={`evdesc-${index}`}>Description override</Label>

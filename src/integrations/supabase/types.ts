@@ -380,6 +380,7 @@ export type Database = {
       }
       sign_in_page_events: {
         Row: {
+          background_brightness: number | null
           background_url: string | null
           banner_enabled: boolean
           banner_text: string | null
@@ -392,12 +393,16 @@ export type Database = {
           id: string
           is_active: boolean
           name: string
+          overlay_blur: number | null
+          overlay_opacity: number | null
+          overlay_tint: string | null
           priority: number
           school_id: string
           starts_at: string
           updated_at: string
         }
         Insert: {
+          background_brightness?: number | null
           background_url?: string | null
           banner_enabled?: boolean
           banner_text?: string | null
@@ -410,12 +415,16 @@ export type Database = {
           id?: string
           is_active?: boolean
           name: string
+          overlay_blur?: number | null
+          overlay_opacity?: number | null
+          overlay_tint?: string | null
           priority?: number
           school_id: string
           starts_at: string
           updated_at?: string
         }
         Update: {
+          background_brightness?: number | null
           background_url?: string | null
           banner_enabled?: boolean
           banner_text?: string | null
@@ -428,6 +437,9 @@ export type Database = {
           id?: string
           is_active?: boolean
           name?: string
+          overlay_blur?: number | null
+          overlay_opacity?: number | null
+          overlay_tint?: string | null
           priority?: number
           school_id?: string
           starts_at?: string
@@ -445,6 +457,7 @@ export type Database = {
       }
       sign_in_pages: {
         Row: {
+          background_brightness: number
           background_url: string | null
           banner_enabled: boolean
           banner_text: string | null
@@ -457,11 +470,15 @@ export type Database = {
           id: string
           is_published: boolean
           logo_url: string | null
+          overlay_blur: number
+          overlay_opacity: number
+          overlay_tint: string
           school_id: string
           slug: string
           updated_at: string
         }
         Insert: {
+          background_brightness?: number
           background_url?: string | null
           banner_enabled?: boolean
           banner_text?: string | null
@@ -474,11 +491,15 @@ export type Database = {
           id?: string
           is_published?: boolean
           logo_url?: string | null
+          overlay_blur?: number
+          overlay_opacity?: number
+          overlay_tint?: string
           school_id: string
           slug: string
           updated_at?: string
         }
         Update: {
+          background_brightness?: number
           background_url?: string | null
           banner_enabled?: boolean
           banner_text?: string | null
@@ -491,6 +512,9 @@ export type Database = {
           id?: string
           is_published?: boolean
           logo_url?: string | null
+          overlay_blur?: number
+          overlay_opacity?: number
+          overlay_tint?: string
           school_id?: string
           slug?: string
           updated_at?: string

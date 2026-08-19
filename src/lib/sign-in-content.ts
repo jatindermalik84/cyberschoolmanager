@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export interface SignInContent {
   slug: string;
   brandName: string;
@@ -9,6 +11,54 @@ export interface SignInContent {
   bannerEnabled: boolean;
   bannerText: string | null;
   bannerTone: string;
+  overlayTint: OverlayTint;
+  overlayOpacity: number;
+  overlayBlur: number;
+  backgroundBrightness: number;
+}
+
+export type OverlayTint = "none" | "dark" | "light" | "brand";
+
+export const OVERLAY_TINTS = [
+  { value: "none", label: "No tint" },
+  { value: "dark", label: "Darken" },
+  { value: "light", label: "Lighten" },
+  { value: "brand", label: "Brand colour" },
+] as const;
+
+export const DEFAULT_OVERLAY = {
+  overlayTint: "dark" as OverlayTint,
+  overlayOpacity: 70,
+  overlayBlur: 0,
+  backgroundBrightness: 100,
+};
+
+function clamp(value: number, min: number, max: number, fallback: number) {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(value)));
+}
+
+/** Inline styles for the background image and its readability overlay. */
+export function overlayStyles(content: Pick<SignInContent, "overlayTint" | "overlayOpacity" | "overlayBlur" | "backgroundBrightness">) {
+  const opacity = clamp(content.overlayOpacity, 0, 100, 70) / 100;
+  const blur = clamp(content.overlayBlur, 0, 24, 0);
+  const brightness = clamp(content.backgroundBrightness, 20, 150, 100) / 100;
+  const tint =
+    content.overlayTint === "light"
+      ? `rgb(255 255 255 / ${opacity})`
+      : content.overlayTint === "brand"
+        ? `color-mix(in oklab, var(--sidebar-primary) ${Math.round(opacity * 100)}%, transparent)`
+        : `rgb(8 12 20 / ${opacity})`;
+  return {
+    image: {
+      filter: `brightness(${brightness})${blur > 0 ? ` blur(${blur}px)` : ""}`,
+      transform: blur > 0 ? `scale(${1 + blur / 100})` : undefined,
+    } as CSSProperties,
+    tint:
+      content.overlayTint === "none"
+        ? null
+        : ({ backgroundColor: tint } as CSSProperties),
+  };
 }
 
 export const DEFAULT_SIGN_IN_CONTENT: SignInContent = {
@@ -27,6 +77,7 @@ export const DEFAULT_SIGN_IN_CONTENT: SignInContent = {
   bannerEnabled: false,
   bannerText: null,
   bannerTone: "info",
+  ...DEFAULT_OVERLAY,
 };
 
 export const BANNER_TONES = [
@@ -46,6 +97,10 @@ export interface SignInPageRow {
   banner_enabled: boolean;
   banner_text: string | null;
   banner_tone: string;
+  overlay_tint?: string | null;
+  overlay_opacity?: number | null;
+  overlay_blur?: number | null;
+  background_brightness?: number | null;
 }
 
 export function rowToContent(row: SignInPageRow): SignInContent {
@@ -60,6 +115,10 @@ export function rowToContent(row: SignInPageRow): SignInContent {
     bannerEnabled: row.banner_enabled,
     bannerText: row.banner_text,
     bannerTone: row.banner_tone,
+    overlayTint: (row.overlay_tint as OverlayTint | null) ?? DEFAULT_OVERLAY.overlayTint,
+    overlayOpacity: row.overlay_opacity ?? DEFAULT_OVERLAY.overlayOpacity,
+    overlayBlur: row.overlay_blur ?? DEFAULT_OVERLAY.overlayBlur,
+    backgroundBrightness: row.background_brightness ?? DEFAULT_OVERLAY.backgroundBrightness,
   };
 }
 
@@ -87,10 +146,14 @@ export interface SignInEventRow {
   banner_text: string | null;
   banner_tone: string;
   background_url: string | null;
+  overlay_tint: string | null;
+  overlay_opacity: number | null;
+  overlay_blur: number | null;
+  background_brightness: number | null;
 }
 
 export const SIGN_IN_EVENT_COLUMNS =
-  "id, name, starts_at, ends_at, is_active, priority, headline, description, highlights, banner_enabled, banner_text, banner_tone, background_url";
+  "id, name, starts_at, ends_at, is_active, priority, headline, description, highlights, banner_enabled, banner_text, banner_tone, background_url, overlay_tint, overlay_opacity, overlay_blur, background_brightness";
 
 export function isEventRunning(event: Pick<SignInEventRow, "starts_at" | "ends_at" | "is_active">, at: Date = new Date()) {
   const now = at.getTime();
@@ -118,5 +181,9 @@ export function applyEvent(base: SignInContent, event: SignInEventRow | null): S
     bannerEnabled: event.banner_enabled && Boolean(event.banner_text?.trim()),
     bannerText: event.banner_text ?? base.bannerText,
     bannerTone: event.banner_tone,
+    overlayTint: (event.overlay_tint as OverlayTint | null) ?? base.overlayTint,
+    overlayOpacity: event.overlay_opacity ?? base.overlayOpacity,
+    overlayBlur: event.overlay_blur ?? base.overlayBlur,
+    backgroundBrightness: event.background_brightness ?? base.backgroundBrightness,
   };
 }
