@@ -100,10 +100,9 @@ export function SignInScreen({ content }: { content: SignInContent }) {
 
   async function handleReset() {
     if (!email) {
-      toast.error("Enter your email address first.");
+      toast.error("Enter your username first.");
       return;
     }
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
     const { error } = await supabase.auth.resetPasswordForEmail(toLoginEmail(email), {
       redirectTo: `${window.location.origin}/reset-password`,
     });
