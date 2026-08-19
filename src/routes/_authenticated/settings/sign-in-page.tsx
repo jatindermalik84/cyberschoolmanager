@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useWorkspace } from "@/components/shell/workspace";
 import { SignInEventsCard } from "@/components/settings/sign-in-events";
 import { SignInAuditLogCard } from "@/components/settings/sign-in-audit-log";
+import { ImageUploadField } from "@/components/settings/image-upload-field";
 import { supabase } from "@/integrations/supabase/client";
 import { BANNER_TONES, bannerClasses } from "@/lib/sign-in-content";
 import { diffFields, logSignInAudit } from "@/lib/sign-in-audit";
@@ -235,19 +236,29 @@ function SignInPageEditor() {
               <CardTitle className="text-base">Branding</CardTitle>
               <CardDescription>Logo and background shown on the left panel.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-3 sm:grid-cols-2">
+            <CardContent className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5 sm:col-span-2">
                 <Label htmlFor="brand">School name</Label>
                 <Input id="brand" value={form.brand_name} onChange={(e) => patch({ brand_name: e.target.value })} />
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="logo">Logo image URL</Label>
-                <Input id="logo" value={form.logo_url} onChange={(e) => patch({ logo_url: e.target.value })} placeholder="https://…" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="bg">Background image URL</Label>
-                <Input id="bg" value={form.background_url} onChange={(e) => patch({ background_url: e.target.value })} placeholder="https://…" />
-              </div>
+              <ImageUploadField
+                id="logo"
+                label="Logo image"
+                schoolId={school.id}
+                folder="logo"
+                value={form.logo_url}
+                onChange={(url) => patch({ logo_url: url })}
+                hint="PNG or SVG with transparent background works best. Max 5 MB."
+              />
+              <ImageUploadField
+                id="bg"
+                label="Background image"
+                schoolId={school.id}
+                folder="background"
+                value={form.background_url}
+                onChange={(url) => patch({ background_url: url })}
+                hint="Wide photo, at least 1600px across. Max 5 MB."
+              />
             </CardContent>
           </Card>
 
