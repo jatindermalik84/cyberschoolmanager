@@ -192,6 +192,12 @@ export function AppSidebar() {
                         <SidebarMenu>
                           {pages.map((p) => {
                             const active = activeModulePageKey === p.pageKey;
+                            const linkProps = p.route
+                              ? ({ to: p.route as "/dashboard" } as const)
+                              : ({
+                                  to: "/m/$module/$page",
+                                  params: { module: activeModule.key, page: p.pageKey },
+                                } as const);
                             return (
                               <SidebarMenuItem key={p.pageKey}>
                                 <SidebarMenuButton
@@ -200,10 +206,7 @@ export function AppSidebar() {
                                   tooltip={p.label}
                                   className={active ? "nav-glow" : undefined}
                                 >
-                                  <Link
-                                    to="/m/$module/$page"
-                                    params={{ module: activeModule.key, page: p.pageKey }}
-                                  >
+                                  <Link {...linkProps}>
                                     <span className="size-1.5 shrink-0 rounded-full bg-sidebar-foreground/40" />
                                     <span className="truncate">{p.label}</span>
                                   </Link>
