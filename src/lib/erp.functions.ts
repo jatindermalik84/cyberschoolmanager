@@ -40,7 +40,7 @@ export const getDashboard = createServerFn({ method: "POST" })
     const { supabase } = context;
     const { schoolId } = data;
 
-    const [students, staff, classes, fees, attendance, activity] = await Promise.all([
+    const [students, staff, classes, fees, attendance, activity, genderRows] = await Promise.all([
       supabase.from("students").select("id", { count: "exact", head: true }).eq("school_id", schoolId).eq("status", "active"),
       supabase.from("staff").select("id", { count: "exact", head: true }).eq("school_id", schoolId).eq("status", "active"),
       supabase.from("classes").select("name, section, strength").eq("school_id", schoolId).order("sort_order"),
@@ -61,7 +61,25 @@ export const getDashboard = createServerFn({ method: "POST" })
         .eq("school_id", schoolId)
         .order("occurred_at", { ascending: false })
         .limit(6),
+      supabase
+        .from("students")
+        .select("gender, classes(name, section, sort_order)")
+        .eq("school_id", schoolId)
+        .eq("status", "active"),
     ]);
+
+    const genderMap = new Map<string, { label: string; sort: number; male: number; female: number; other: number }>();
+    for (const row of (genderRows.data ?? []) as Array<{ gender: string | null; classes: { name: string; section: string | null; sort_order: number | null } | null }>) {
+      const cls = row.classes;
+      const label = cls ? `${cls.name}${cls.section ? `-${cls.section}` : ""}` : "Unassigned";
+      const entry = genderMap.get(label) ?? { label, sort: cls?.sort_order ?? 9999, male: 0, female: 0, other: 0 };
+      const g = (row.gender ?? "").toLowerCase();
+      if (g.startsWith("m")) entry.male += 1;
+      else if (g.startsWith("f")) entry.female += 1;
+      else entry.other += 1;
+      genderMap.set(label, entry);
+    }
+    const gender = [...genderMap.values()].sort((a, b) => a.sort - b.sort);
 
     return {
       studentCount: students.count ?? 0,
@@ -70,5 +88,6 @@ export const getDashboard = createServerFn({ method: "POST" })
       fees: fees.data ?? [],
       attendance: attendance.data ?? [],
       activity: activity.data ?? [],
+      gender,
     };
   });

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, FileText } from "lucide-react";
 import {
-  Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
 import {
@@ -92,6 +92,16 @@ export function KpiDetailSheet({
   const value = tile?.compute && data ? tile.compute(data) : null;
   const breakdown = tile && data ? breakdownFor(tile, data) : null;
   const money = breakdown?.title === "Month-by-month collection";
+
+  const showGender =
+    !!tile &&
+    /student|strength|roll|enrol|admission|attend|present|absent/.test(`${tile.id} ${tile.label}`.toLowerCase());
+  const genderRows = showGender ? (data?.gender ?? []) : [];
+  const genderTotals = genderRows.reduce(
+    (acc, r) => ({ male: acc.male + r.male, female: acc.female + r.female, other: acc.other + r.other }),
+    { male: 0, female: 0, other: 0 },
+  );
+  const hasOther = genderTotals.other > 0;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -185,6 +195,52 @@ export function KpiDetailSheet({
                         <span className="tnum shrink-0 text-sm font-semibold">{r.value}</span>
                       </li>
                     ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {genderRows.length ? (
+                <section className="space-y-3">
+                  <div>
+                    <h3 className="font-display text-sm font-semibold">Boys / girls split</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {nf(genderTotals.male)} boys · {nf(genderTotals.female)} girls
+                      {hasOther ? ` · ${nf(genderTotals.other)} other/unspecified` : ""} from student records across {genderRows.length} class sections
+                    </p>
+                  </div>
+
+                  <div className="h-52 rounded-xl border bg-card p-3">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={genderRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                        <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={0} />
+                        <YAxis tickLine={false} axisLine={false} fontSize={10} width={32} allowDecimals={false} />
+                        <Tooltip cursor={{ fill: "var(--color-muted)" }} formatter={(v: number) => nf(v)} />
+                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                        <Bar dataKey="male" stackId="g" name="Boys" fill="var(--color-primary)" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="female" stackId="g" name="Girls" fill="var(--color-accent)" radius={hasOther ? [0, 0, 0, 0] : [6, 6, 0, 0]} />
+                        {hasOther ? (
+                          <Bar dataKey="other" stackId="g" name="Other" fill="var(--color-muted-foreground)" radius={[6, 6, 0, 0]} />
+                        ) : null}
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <ul className="divide-y rounded-xl border bg-card">
+                    {genderRows.map((r) => {
+                      const total = r.male + r.female + r.other;
+                      return (
+                        <li key={r.label} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium">{r.label}</p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              {nf(r.male)} boys · {nf(r.female)} girls{r.other ? ` · ${nf(r.other)} other` : ""}
+                            </p>
+                          </div>
+                          <span className="tnum shrink-0 text-sm font-semibold">{nf(total)}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </section>
               ) : null}
