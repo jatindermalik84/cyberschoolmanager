@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
+import { ArrowLeft, ArrowLeftRight, BarChart3, ChevronRight, Database, LayoutDashboard, Search, X } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -19,9 +19,14 @@ const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communicat
 
 const AREA_ORDER: ModuleArea[] = ["transaction", "setup", "report"];
 const AREA_TITLES: Record<ModuleArea, string> = {
-  transaction: "Daily operations",
-  setup: "Configuration",
-  report: "Insights & reports",
+  transaction: "Transactions",
+  setup: "Master",
+  report: "Reports",
+};
+const AREA_ICONS: Record<ModuleArea, React.ElementType> = {
+  transaction: ArrowLeftRight,
+  setup: Database,
+  report: BarChart3,
 };
 
 function matchesQuery(label: string, query: string) {
