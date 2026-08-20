@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info, FileText, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info, SlidersHorizontal } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
