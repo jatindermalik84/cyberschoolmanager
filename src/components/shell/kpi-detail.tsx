@@ -234,9 +234,10 @@ export function KpiDetailSheet({
                         <p className="truncate text-sm font-medium">Total students</p>
                       </div>
                       <span className="tnum shrink-0 text-sm font-semibold">
-                        {nf(genderTotals.male + genderTotals.female + genderTotals.other)}
+                        {value?.value ?? nf(genderTotals.male + genderTotals.female + genderTotals.other)}
                       </span>
                     </li>
+
                     <li className="flex items-center justify-between gap-3 px-4 py-2.5">
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium">Boys</p>
