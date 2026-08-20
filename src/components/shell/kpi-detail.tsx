@@ -8,7 +8,7 @@ import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { inr, STATUS_LABEL, type DashData, type TileSpec } from "@/lib/dashboard-spec";
+import { inr, type DashData, type TileSpec } from "@/lib/dashboard-spec";
 import type { ModulePage } from "@/lib/module-catalogue";
 
 type Row = { label: string; value: string; meta?: string };
