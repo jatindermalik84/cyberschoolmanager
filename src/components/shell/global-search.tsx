@@ -17,7 +17,7 @@ interface PageHit {
   hint: string;
   moduleKey: string;
   pageKey: string;
-  route?: string;
+  route?: string | undefined;
 }
 
 export function GlobalSearch() {
