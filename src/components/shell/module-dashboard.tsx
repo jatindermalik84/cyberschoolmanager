@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip as UiTooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip as UiTooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { getDashboard } from "@/lib/erp.functions";
 import { MODULE_BY_KEY, AREA_LABELS, type ModuleArea } from "@/lib/module-catalogue";
@@ -36,14 +36,16 @@ function StatusChip({ status, className }: { status: WidgetStatus; className?: s
 
 function NoteHint({ note }: { note: string }) {
   return (
-    <UiTooltip>
+    <TooltipProvider delayDuration={150}>
+      <UiTooltip>
       <TooltipTrigger asChild>
         <button type="button" aria-label="Why" className="text-muted-foreground/70 transition hover:text-foreground">
           <Info className="size-3.5" />
         </button>
       </TooltipTrigger>
-      <TooltipContent className="max-w-xs text-xs leading-relaxed">{note}</TooltipContent>
-    </UiTooltip>
+        <TooltipContent className="max-w-xs text-xs leading-relaxed">{note}</TooltipContent>
+      </UiTooltip>
+    </TooltipProvider>
   );
 }
 
