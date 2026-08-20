@@ -34,9 +34,9 @@ export interface DashData {
 export interface TileValue {
   value: string;
   /** signed change vs the comparison period */
-  delta?: { value: string; direction: "up" | "down" | "flat"; label: string };
+  delta?: { value: string; direction: "up" | "down" | "flat"; label: string } | undefined;
   /** "1,135 of 1,401 marked" — never show a bare percentage on partial data */
-  coverage?: string;
+  coverage?: string | undefined;
 }
 
 export interface TileSpec {
@@ -55,8 +55,8 @@ export interface TileSpec {
 export interface WorklistRow {
   title: string;
   meta: string;
-  value?: string;
-  tone?: "warning" | "danger" | "muted";
+  value?: string | undefined;
+  tone?: "warning" | "danger" | "muted" | undefined;
 }
 
 export interface WorklistSpec {
