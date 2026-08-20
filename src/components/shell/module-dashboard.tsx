@@ -16,7 +16,7 @@ import {
 } from "@/lib/dashboard-spec";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-import { WidgetEditor } from "./widget-editor";
+
 import { KpiDetailSheet } from "./kpi-detail";
 import { applyOverrides, fetchWidgetOverrides, type OverrideMap } from "@/lib/widget-overrides";
 
