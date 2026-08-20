@@ -235,29 +235,35 @@ export function KpiDetailSheet({
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="rounded-xl border bg-card">
-                    <div className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                      <span>Class</span>
-                      <span className="tnum text-right">Total</span>
-                      <span className="tnum text-right">Boys</span>
-                      <span className="tnum text-right">Girls</span>
-                    </div>
-                    <ul className="divide-y">
-                      {classRows.map((r) => (
-                        <li key={r.label} className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2.5">
-                          <span className="truncate text-sm font-medium">{r.label}</span>
-                          <span className="tnum text-right text-sm font-semibold">{nf(r.total)}</span>
-                          <span className="tnum text-right text-sm">{nf(r.male)}</span>
-                          <span className="tnum text-right text-sm">{nf(r.female)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2.5 text-sm font-semibold border-t bg-muted/30">
-                      <span>All sections</span>
-                      <span className="tnum text-right">{nf(classTotals.total)}</span>
-                      <span className="tnum text-right">{nf(classTotals.male)}</span>
-                      <span className="tnum text-right">{nf(classTotals.female)}</span>
-                    </div>
+                  <div className="overflow-hidden rounded-xl border bg-card">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr className="border-b bg-muted/40 text-[11px] uppercase tracking-[0.08em] text-muted-foreground">
+                          <th className="px-4 py-2 text-left font-semibold">Class</th>
+                          <th className="w-16 px-3 py-2 text-right font-semibold">Total</th>
+                          <th className="w-16 px-3 py-2 text-right font-semibold">Boys</th>
+                          <th className="w-16 px-4 py-2 text-right font-semibold">Girls</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {classRows.map((r) => (
+                          <tr key={r.label} className="transition-colors hover:bg-muted/30">
+                            <td className="max-w-0 truncate px-4 py-2 font-medium">{r.label}</td>
+                            <td className="tnum px-3 py-2 text-right font-semibold">{nf(r.total)}</td>
+                            <td className="tnum px-3 py-2 text-right text-muted-foreground">{nf(r.male)}</td>
+                            <td className="tnum px-4 py-2 text-right text-muted-foreground">{nf(r.female)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="border-t bg-muted/40 font-semibold">
+                          <td className="px-4 py-2">All sections</td>
+                          <td className="tnum px-3 py-2 text-right">{nf(classTotals.total)}</td>
+                          <td className="tnum px-3 py-2 text-right">{nf(classTotals.male)}</td>
+                          <td className="tnum px-4 py-2 text-right">{nf(classTotals.female)}</td>
+                        </tr>
+                      </tfoot>
+                    </table>
                   </div>
                 </section>
               ) : null}
