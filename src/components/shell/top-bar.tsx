@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
+import { GlobalSearch } from "./global-search";
 import { useWorkspace } from "./workspace";
 
 
@@ -69,6 +70,7 @@ export function TopBar() {
       </Select>
 
       <div className="ml-auto flex items-center gap-2">
+        <GlobalSearch />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account menu">
