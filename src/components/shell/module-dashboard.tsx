@@ -20,7 +20,7 @@ import { useWorkspace } from "./workspace";
 import { KpiDetailSheet } from "./kpi-detail";
 import { applyOverrides, fetchWidgetOverrides, type OverrideMap } from "@/lib/widget-overrides";
 
-const EDITOR_ROLES = ["super_admin", "school_owner", "school_admin", "principal"];
+
 
 /* ------------------------------------------------------------------ atoms */
 
@@ -196,12 +196,10 @@ function Worklist({ list, data }: { list: WorklistSpec; data: DashData | undefin
 
 export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
   const { school, roles } = useWorkspace();
-  const [editorOpen, setEditorOpen] = useState(false);
   const [activeTile, setActiveTile] = useState<TileSpec | null>(null);
   const mod = MODULE_BY_KEY[moduleKey];
   const Icon = iconFor(mod?.icon ?? "");
   const baseSpec = dashboardSpecFor(moduleKey);
-  const canEdit = roles.some((r) => EDITOR_ROLES.includes(r));
 
   const { data, isPending } = useQuery({
     queryKey: ["dashboard", school?.id],
@@ -282,17 +280,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         </div>
       </div>
 
-      {canEdit && school ? (
-        <WidgetEditor
-          open={editorOpen}
-          onOpenChange={setEditorOpen}
-          moduleKey={moduleKey}
-          moduleName={mod.name}
-          schoolId={school.id}
-          spec={baseSpec}
-          overrides={(overrides ?? {}) as OverrideMap}
-        />
-      ) : null}
 
       {/* Band A — KPI tiles */}
       {isPending && school ? (
