@@ -184,15 +184,22 @@ export function KpiDetailSheet({
 
               {showGender && classRows.length ? (
                 <section className="space-y-3">
-                  <div>
-                    <h3 className="font-display text-sm font-semibold">Boys / girls split</h3>
-                    <p className="text-xs text-muted-foreground">
-                      {nf(classTotals.male)} boys · {nf(classTotals.female)} girls
-                      {hasOther ? ` · ${nf(classTotals.other)} other/unspecified` : ""} across {classRows.length} class sections
-                    </p>
-                  </div>
-
                   <div className="h-52 rounded-xl border bg-card p-3">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={classRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                        <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={0} />
+                        <YAxis tickLine={false} axisLine={false} fontSize={10} width={32} allowDecimals={false} />
+                        <Tooltip cursor={{ fill: "var(--color-muted)" }} formatter={(v: number) => nf(v)} />
+                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                        <Bar dataKey="male" stackId="g" name="Boys" fill="var(--color-primary)" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="female" stackId="g" name="Girls" fill="var(--color-accent)" radius={hasOther ? [0, 0, 0, 0] : [6, 6, 0, 0]} />
+                        {hasOther ? (
+                          <Bar dataKey="other" stackId="g" name="Other" fill="var(--color-muted-foreground)" radius={[6, 6, 0, 0]} />
+                        ) : null}
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={classRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
