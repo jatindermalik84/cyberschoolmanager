@@ -402,5 +402,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         </div>
       ) : null}
 
+    </div>
   );
 }
