@@ -95,7 +95,8 @@ export function KpiDetailSheet({
 
   const showGender =
     !!tile &&
-    /student|strength|roll|enrol|admission|attend|present|absent/.test(`${tile.id} ${tile.label}`.toLowerCase());
+    /student|strength|roll|enrol|admission/.test(`${tile.id} ${tile.label}`.toLowerCase());
+
   const genderRows = showGender ? (data?.gender ?? []) : [];
   const genderTotals = genderRows.reduce(
     (acc, r) => ({ male: acc.male + r.male, female: acc.female + r.female, other: acc.other + r.other }),
@@ -163,7 +164,7 @@ export function KpiDetailSheet({
                 ) : null}
               </dl>
 
-              {breakdown && breakdown.rows.length ? (
+              {!showGender && breakdown && breakdown.rows.length ? (
                 <section className="space-y-3">
                   <div>
                     <h3 className="font-display text-sm font-semibold">{breakdown.title}</h3>
@@ -199,6 +200,7 @@ export function KpiDetailSheet({
                 </section>
               ) : null}
 
+
               {genderRows.length ? (
                 <section className="space-y-3">
                   <div>
@@ -227,21 +229,37 @@ export function KpiDetailSheet({
                   </div>
 
                   <ul className="divide-y rounded-xl border bg-card">
-                    {genderRows.map((r) => {
-                      const total = r.male + r.female + r.other;
-                      return (
-                        <li key={r.label} className="flex items-center justify-between gap-3 px-4 py-2.5">
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-medium">{r.label}</p>
-                            <p className="truncate text-xs text-muted-foreground">
-                              {nf(r.male)} boys · {nf(r.female)} girls{r.other ? ` · ${nf(r.other)} other` : ""}
-                            </p>
-                          </div>
-                          <span className="tnum shrink-0 text-sm font-semibold">{nf(total)}</span>
-                        </li>
-                      );
-                    })}
+                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">Total students</p>
+                      </div>
+                      <span className="tnum shrink-0 text-sm font-semibold">
+                        {value?.value ?? nf(genderTotals.male + genderTotals.female + genderTotals.other)}
+                      </span>
+                    </li>
+
+                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">Boys</p>
+                      </div>
+                      <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.male)}</span>
+                    </li>
+                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">Girls</p>
+                      </div>
+                      <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.female)}</span>
+                    </li>
+                    {hasOther ? (
+                      <li className="flex items-center justify-between gap-3 px-4 py-2.5">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium">Other / unspecified</p>
+                        </div>
+                        <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.other)}</span>
+                      </li>
+                    ) : null}
                   </ul>
+
                 </section>
               ) : null}
 
