@@ -17,6 +17,7 @@ import {
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 import { WidgetEditor } from "./widget-editor";
+import { KpiDetailSheet } from "./kpi-detail";
 import { applyOverrides, fetchWidgetOverrides, type OverrideMap } from "@/lib/widget-overrides";
 
 const EDITOR_ROLES = ["super_admin", "school_owner", "school_admin", "principal"];
@@ -196,6 +197,7 @@ function Worklist({ list, data }: { list: WorklistSpec; data: DashData | undefin
 export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
   const { school, roles } = useWorkspace();
   const [editorOpen, setEditorOpen] = useState(false);
+  const [activeTile, setActiveTile] = useState<TileSpec | null>(null);
   const mod = MODULE_BY_KEY[moduleKey];
   const Icon = iconFor(mod?.icon ?? "");
   const baseSpec = dashboardSpecFor(moduleKey);
@@ -309,9 +311,18 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {tiles.map((t) => <KpiTile key={t.id} tile={t} data={dash} />)}
+          {tiles.map((t) => <KpiTile key={t.id} tile={t} data={dash} onOpen={setActiveTile} />)}
         </div>
       )}
+
+      <KpiDetailSheet
+        tile={activeTile}
+        data={dash}
+        moduleKey={mod.key}
+        reports={reports}
+        open={Boolean(activeTile)}
+        onOpenChange={(v) => { if (!v) setActiveTile(null); }}
+      />
 
       {/* Band B — trend chart + activity */}
       <div className="grid items-start gap-5 lg:grid-cols-12">
