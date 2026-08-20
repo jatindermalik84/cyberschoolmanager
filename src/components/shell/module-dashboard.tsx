@@ -95,14 +95,14 @@ function KpiTile({ tile, data, onOpen }: { tile: TileSpec; data: DashData | unde
       onClick={() => onOpen(tile)}
       aria-label={`${tile.label} — view details`}
       className={cn(
-        "group flex w-full cursor-pointer flex-col justify-between rounded-2xl border bg-card p-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        !unavailable && "hover:border-primary/40 hover:shadow-[0_10px_25px_-12px_color-mix(in_oklab,var(--color-primary)_45%,transparent)]",
+        "group flex w-full cursor-pointer flex-col rounded-2xl border bg-card p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        !unavailable && "hover:border-primary/40 hover:shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--color-primary)_40%,transparent)]",
         unavailable && "border-dashed bg-muted/25 hover:border-primary/30",
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{tile.label}</p>
-        <div className="flex shrink-0 items-center gap-1.5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">{tile.label}</p>
+        <div className="flex shrink-0 items-center gap-1">
           {tile.note ? <NoteHint note={tile.note} /> : null}
           <StatusChip status={tile.status} />
         </div>
@@ -110,7 +110,7 @@ function KpiTile({ tile, data, onOpen }: { tile: TileSpec; data: DashData | unde
 
       <p
         className={cn(
-          "tnum mt-3 font-display text-3xl font-bold leading-none",
+          "tnum mt-2 font-display text-2xl font-bold leading-none",
           unavailable && "text-muted-foreground/60",
           !unavailable && tone === "success" && "text-success",
           !unavailable && tone === "warning" && "text-warning-foreground",
@@ -122,31 +122,31 @@ function KpiTile({ tile, data, onOpen }: { tile: TileSpec; data: DashData | unde
       {!unavailable && v.delta ? (
         <p
           className={cn(
-            "mt-2 inline-flex items-center gap-1 text-xs font-medium",
+            "mt-1 inline-flex items-center gap-1 text-[11px] font-medium",
             v.delta.direction === "up" && "text-success",
             v.delta.direction === "down" && "text-destructive",
             v.delta.direction === "flat" && "text-muted-foreground",
           )}
         >
-          {v.delta.direction === "up" ? <ArrowUpRight className="size-3.5" />
-            : v.delta.direction === "down" ? <ArrowDownRight className="size-3.5" />
-              : <Minus className="size-3.5" />}
+          {v.delta.direction === "up" ? <ArrowUpRight className="size-3" />
+            : v.delta.direction === "down" ? <ArrowDownRight className="size-3" />
+              : <Minus className="size-3" />}
           {v.delta.value}
           <span className="font-normal text-muted-foreground">{v.delta.label}</span>
         </p>
       ) : null}
 
-      <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">
+      <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-muted-foreground">
         {unavailable ? (tile.status === "blocked" ? "Not captured yet" : tile.answers) : (v.coverage ?? tile.answers)}
       </p>
 
       {tile.reconcile ? (
-        <p className="mt-2 truncate text-[10px] uppercase tracking-[0.1em] text-muted-foreground/70">
+        <p className="mt-1 truncate text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
           Reconciles to {tile.reconcile}
         </p>
       ) : null}
 
-      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-primary opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+      <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-primary opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
         View details <ArrowRight className="size-3" />
       </span>
     </button>
@@ -306,11 +306,11 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
 
       {/* Band A — KPI tiles */}
       {isPending && school ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {[0, 1, 2, 3, 4, 5].map((i) => <Skeleton key={i} className="h-40 w-full rounded-2xl" />)}
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+          {[0, 1, 2, 3, 4, 5].map((i) => <Skeleton key={i} className="h-28 w-full rounded-2xl" />)}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
           {tiles.map((t) => <KpiTile key={t.id} tile={t} data={dash} onOpen={setActiveTile} />)}
         </div>
       )}
