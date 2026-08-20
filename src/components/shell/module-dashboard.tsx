@@ -402,47 +402,5 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         </div>
       ) : null}
 
-      {/* Band D — report launcher */}
-      {reports.length ? (
-        <div>
-          <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            Quick reports
-          </h2>
-          <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
-            {reports.slice(0, 12).map((p) => (
-              <Link
-                key={p.pageKey}
-                to="/m/$module/$page"
-                params={{ module: mod.key, page: p.pageKey }}
-                className="group flex items-center gap-3 rounded-xl border bg-card px-4 py-3 transition hover:border-primary/40 hover:bg-primary/5"
-              >
-                <FileText className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" />
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">{p.label}</span>
-                <ArrowRight className="size-3.5 shrink-0 text-muted-foreground opacity-0 transition group-hover:opacity-100" />
-              </Link>
-            ))}
-          </div>
-          {reports.length > 12 ? (
-            <p className="mt-3 text-xs text-muted-foreground">
-              {reports.length - 12} more reports in the sidebar.
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      {/* decisions */}
-      {spec.decisions?.length ? (
-        <Panel title="Open decisions" subtitle="Settle these before the blocked widgets are built">
-          <ul className="divide-y">
-            {spec.decisions.map((d) => (
-              <li key={d.question} className="px-6 py-4">
-                <p className="text-sm font-medium">{d.question}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Recommendation — {d.recommendation}</p>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-      ) : null}
-    </div>
   );
 }
