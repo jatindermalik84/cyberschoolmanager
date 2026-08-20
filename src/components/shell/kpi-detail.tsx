@@ -98,11 +98,18 @@ export function KpiDetailSheet({
     /student|strength|roll|enrol|admission/.test(`${tile.id} ${tile.label}`.toLowerCase());
 
   const genderRows = showGender ? (data?.gender ?? []) : [];
-  const genderTotals = genderRows.reduce(
-    (acc, r) => ({ male: acc.male + r.male, female: acc.female + r.female, other: acc.other + r.other }),
-    { male: 0, female: 0, other: 0 },
+
+  const classRows = data?.classes.map((c) => {
+    const label = `${c.name}${c.section ? ` · ${c.section}` : ""}`;
+    const genderLabel = `${c.name}${c.section ? `-${c.section}` : ""}`;
+    const g = genderRows.find((r) => r.label === genderLabel) ?? { male: 0, female: 0, other: 0 };
+    return { label, total: c.strength ?? 0, male: g.male, female: g.female, other: g.other };
+  }) ?? [];
+  const classTotals = classRows.reduce(
+    (acc, r) => ({ total: acc.total + r.total, male: acc.male + r.male, female: acc.female + r.female, other: acc.other + r.other }),
+    { total: 0, male: 0, female: 0, other: 0 },
   );
-  const hasOther = genderTotals.other > 0;
+  const hasOther = classTotals.other > 0;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -201,19 +208,19 @@ export function KpiDetailSheet({
               ) : null}
 
 
-              {genderRows.length ? (
+              {showGender && classRows.length ? (
                 <section className="space-y-3">
                   <div>
                     <h3 className="font-display text-sm font-semibold">Boys / girls split</h3>
                     <p className="text-xs text-muted-foreground">
-                      {nf(genderTotals.male)} boys · {nf(genderTotals.female)} girls
-                      {hasOther ? ` · ${nf(genderTotals.other)} other/unspecified` : ""} from student records across {genderRows.length} class sections
+                      {nf(classTotals.male)} boys · {nf(classTotals.female)} girls
+                      {hasOther ? ` · ${nf(classTotals.other)} other/unspecified` : ""} across {classRows.length} class sections
                     </p>
                   </div>
 
                   <div className="h-52 rounded-xl border bg-card p-3">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={genderRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+                      <BarChart data={classRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
                         <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={0} />
                         <YAxis tickLine={false} axisLine={false} fontSize={10} width={32} allowDecimals={false} />
@@ -228,38 +235,30 @@ export function KpiDetailSheet({
                     </ResponsiveContainer>
                   </div>
 
-                  <ul className="divide-y rounded-xl border bg-card">
-                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">Total students</p>
-                      </div>
-                      <span className="tnum shrink-0 text-sm font-semibold">
-                        {value?.value ?? nf(genderTotals.male + genderTotals.female + genderTotals.other)}
-                      </span>
-                    </li>
-
-                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">Boys</p>
-                      </div>
-                      <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.male)}</span>
-                    </li>
-                    <li className="flex items-center justify-between gap-3 px-4 py-2.5">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">Girls</p>
-                      </div>
-                      <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.female)}</span>
-                    </li>
-                    {hasOther ? (
-                      <li className="flex items-center justify-between gap-3 px-4 py-2.5">
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-medium">Other / unspecified</p>
-                        </div>
-                        <span className="tnum shrink-0 text-sm font-semibold">{nf(genderTotals.other)}</span>
-                      </li>
-                    ) : null}
-                  </ul>
-
+                  <div className="rounded-xl border bg-card">
+                    <div className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      <span>Class</span>
+                      <span className="tnum text-right">Total</span>
+                      <span className="tnum text-right">Boys</span>
+                      <span className="tnum text-right">Girls</span>
+                    </div>
+                    <ul className="divide-y">
+                      {classRows.map((r) => (
+                        <li key={r.label} className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2.5">
+                          <span className="truncate text-sm font-medium">{r.label}</span>
+                          <span className="tnum text-right text-sm font-semibold">{nf(r.total)}</span>
+                          <span className="tnum text-right text-sm">{nf(r.male)}</span>
+                          <span className="tnum text-right text-sm">{nf(r.female)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="grid grid-cols-[1fr,repeat(3,4rem)] items-center gap-3 px-4 py-2.5 text-sm font-semibold border-t bg-muted/30">
+                      <span>All sections</span>
+                      <span className="tnum text-right">{nf(classTotals.total)}</span>
+                      <span className="tnum text-right">{nf(classTotals.male)}</span>
+                      <span className="tnum text-right">{nf(classTotals.female)}</span>
+                    </div>
+                  </div>
                 </section>
               ) : null}
 
