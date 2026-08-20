@@ -83,17 +83,20 @@ function Panel({
 
 /* ------------------------------------------------------------- band A tile */
 
-function KpiTile({ tile, data }: { tile: TileSpec; data: DashData | undefined }) {
+function KpiTile({ tile, data, onOpen }: { tile: TileSpec; data: DashData | undefined; onOpen: (t: TileSpec) => void }) {
   const v = tile.compute && data ? tile.compute(data) : null;
   const unavailable = tile.status === "blocked" || !v;
   const tone = tile.tone ?? "primary";
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={() => onOpen(tile)}
+      aria-label={`${tile.label} — view details`}
       className={cn(
-        "group flex flex-col justify-between rounded-2xl border bg-card p-5 transition",
+        "group flex w-full cursor-pointer flex-col justify-between rounded-2xl border bg-card p-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         !unavailable && "hover:border-primary/40 hover:shadow-[0_10px_25px_-12px_color-mix(in_oklab,var(--color-primary)_45%,transparent)]",
-        unavailable && "border-dashed bg-muted/25",
+        unavailable && "border-dashed bg-muted/25 hover:border-primary/30",
       )}
     >
       <div className="flex items-start justify-between gap-2">
@@ -141,7 +144,11 @@ function KpiTile({ tile, data }: { tile: TileSpec; data: DashData | undefined })
           Reconciles to {tile.reconcile}
         </p>
       ) : null}
-    </div>
+
+      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-primary opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+        View details <ArrowRight className="size-3" />
+      </span>
+    </button>
   );
 }
 
