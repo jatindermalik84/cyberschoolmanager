@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   Activity, CalendarCheck, GraduationCap, IndianRupee, TriangleAlert, Users,
 } from "lucide-react";
@@ -9,6 +10,8 @@ import {
 
 import csmLogo from "@/assets/csm-logo.png.asset.json";
 import { KpiCard } from "@/components/dashboard/kpi-card";
+import { KpiDetailSheet } from "@/components/shell/kpi-detail";
+import type { DashData, TileSpec } from "@/lib/dashboard-spec";
 import { useWorkspace } from "@/components/shell/workspace";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +53,9 @@ const monthLabel = (d: string) =>
 
 function DashboardPage() {
   const { school, session, profile } = useWorkspace();
+  const [tile, setTile] = useState<TileSpec | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const openTile = (t: TileSpec) => { setTile(t); setDetailOpen(true); };
 
   const { data, isPending } = useQuery({
     queryKey: ["dashboard", school?.id],
