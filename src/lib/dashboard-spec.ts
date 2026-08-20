@@ -29,6 +29,7 @@ export interface DashData {
     total_count: number | null;
   }[];
   activity: { id: string; actor_name: string; action: string; entity: string; occurred_at: string }[];
+  gender?: { label: string; male: number; female: number; other: number }[];
 }
 
 export interface TileValue {
