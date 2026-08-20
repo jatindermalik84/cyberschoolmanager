@@ -27,7 +27,7 @@ export function KpiCard({
       className={cn(
         "overflow-hidden",
         clickable &&
-          "cursor-pointer transition hover:border-primary/40 hover:shadow-[0_10px_25px_-12px_color-mix(in_oklab,var(--color-primary)_45%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "cursor-pointer transition hover:border-primary/40 hover:shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--color-primary)_40%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       )}
       {...(clickable
         ? {
@@ -44,14 +44,14 @@ export function KpiCard({
           }
         : {})}
     >
-      <CardContent className="flex items-start gap-3 p-5">
-        <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-md", tones[tone])}>
-          <Icon className="size-5" />
+      <CardContent className="flex items-start gap-3 p-4">
+        <div className={cn("flex size-9 shrink-0 items-center justify-center rounded-md", tones[tone])}>
+          <Icon className="size-4" />
         </div>
         <div className="min-w-0 space-y-0.5">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-          <p className="tnum font-display text-2xl font-semibold leading-tight">{value}</p>
-          {hint ? <p className="truncate text-xs text-muted-foreground">{hint}</p> : null}
+          <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+          <p className="tnum font-display text-xl font-semibold leading-tight">{value}</p>
+          {hint ? <p className="truncate text-[11px] text-muted-foreground">{hint}</p> : null}
         </div>
       </CardContent>
     </Card>
