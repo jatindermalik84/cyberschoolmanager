@@ -132,6 +132,14 @@ function DashboardPage() {
           label="Students on roll"
           value={onRoll.toLocaleString("en-IN")}
           hint={`${data.classes.length} class sections · ${data.studentCount} detailed records`}
+          onClick={() => openTile({
+            id: "students-on-roll",
+            label: "Students on roll",
+            answers: "How many students are on roll across all class sections right now?",
+            status: "ready",
+            reconcile: "Class strength register",
+            compute: () => ({ value: onRoll.toLocaleString("en-IN"), coverage: `${data.classes.length} class sections` }),
+          })}
         />
         <KpiCard
           icon={Users}
@@ -139,6 +147,14 @@ function DashboardPage() {
           value={data.staffCount.toLocaleString("en-IN")}
           hint="Teaching and support"
           tone="accent"
+          onClick={() => openTile({
+            id: "active-staff",
+            label: "Active staff",
+            answers: "How many teaching and support staff are currently active?",
+            status: "ready",
+            reconcile: "HR staff register",
+            compute: () => ({ value: data.staffCount.toLocaleString("en-IN"), coverage: "Teaching and support" }),
+          })}
         />
         <KpiCard
           icon={IndianRupee}
@@ -146,6 +162,17 @@ function DashboardPage() {
           value={latestFee ? inr(Number(latestFee.collected_amount)) : "—"}
           hint={latestFee ? `${collectionRate}% of demand raised` : undefined}
           tone="success"
+          onClick={() => openTile({
+            id: "fee-collected",
+            label: "Fee collected (month)",
+            answers: "How much of this month's fee demand has actually been collected?",
+            status: "ready",
+            reconcile: "Fee collection register",
+            compute: () => ({
+              value: latestFee ? inr(Number(latestFee.collected_amount)) : "—",
+              coverage: latestFee ? `${collectionRate}% of demand raised` : undefined,
+            }),
+          })}
         />
         <KpiCard
           icon={CalendarCheck}
@@ -157,8 +184,30 @@ function DashboardPage() {
               : undefined
           }
           tone="warning"
+          onClick={() => openTile({
+            id: "attendance-today",
+            label: "Attendance today",
+            answers: "What share of the roll was present on the latest marking day?",
+            status: "ready",
+            reconcile: "Daily attendance register",
+            compute: () => ({
+              value: latestAttendance ? `${attendanceRate}%` : "—",
+              coverage: latestAttendance
+                ? `${latestAttendance.present_count} present · ${latestAttendance.absent_count} absent`
+                : undefined,
+            }),
+          })}
         />
       </div>
+
+      <KpiDetailSheet
+        tile={tile}
+        data={data as unknown as DashData}
+        moduleKey={tile?.id === "fee-collected" ? "fee" : tile?.id === "attendance-today" ? "attendance" : tile?.id === "active-staff" ? "hr" : "students"}
+        reports={[]}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+      />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
