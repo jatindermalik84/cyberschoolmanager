@@ -22,8 +22,8 @@ export interface ModuleDef {
 }
 
 export const AREA_LABELS: Record<ModuleArea, string> = {
-  setup: "Setup",
-  transaction: "Daily work",
+  setup: "Master",
+  transaction: "Transactions",
   report: "Reports",
 };
 

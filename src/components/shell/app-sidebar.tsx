@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
+import { ArrowLeft, ArrowLeftRight, BarChart3, ChevronRight, Database, LayoutDashboard, Search, X } from "lucide-react";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -19,9 +19,14 @@ const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communicat
 
 const AREA_ORDER: ModuleArea[] = ["transaction", "setup", "report"];
 const AREA_TITLES: Record<ModuleArea, string> = {
-  transaction: "Daily operations",
-  setup: "Configuration",
-  report: "Insights & reports",
+  transaction: "Transactions",
+  setup: "Master",
+  report: "Reports",
+};
+const AREA_ICONS: Record<ModuleArea, React.ElementType> = {
+  transaction: ArrowLeftRight,
+  setup: Database,
+  report: BarChart3,
 };
 
 function matchesQuery(label: string, query: string) {
@@ -187,7 +192,13 @@ export function AppSidebar() {
                   <SidebarGroup className="p-0">
                     <SidebarGroupLabel asChild>
                       <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                        <span>{AREA_TITLES[area]}</span>
+                        <span className="flex items-center gap-2">
+                          {(() => {
+                            const Icon = AREA_ICONS[area];
+                            return <Icon className="size-4 text-sidebar-foreground/70" />;
+                          })()}
+                          {AREA_TITLES[area]}
+                        </span>
                         <ChevronRight className="size-4 shrink-0 text-sidebar-foreground/70 transition-transform duration-200 group-data-[state=open]/label:rotate-90" />
                       </CollapsibleTrigger>
                     </SidebarGroupLabel>
