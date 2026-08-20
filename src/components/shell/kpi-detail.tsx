@@ -103,7 +103,7 @@ export function KpiDetailSheet({
     const label = `${c.name}${c.section ? ` · ${c.section}` : ""}`;
     const genderLabel = `${c.name}${c.section ? `-${c.section}` : ""}`;
     const g = genderRows.find((r) => r.label === genderLabel) ?? { male: 0, female: 0, other: 0 };
-    return { label, total: c.strength ?? 0, ...g };
+    return { label, total: c.strength ?? 0, male: g.male, female: g.female, other: g.other };
   }) ?? [];
   const classTotals = classRows.reduce(
     (acc, r) => ({ total: acc.total + r.total, male: acc.male + r.male, female: acc.female + r.female, other: acc.other + r.other }),
