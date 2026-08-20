@@ -184,14 +184,6 @@ export function KpiDetailSheet({
 
               {showGender && classRows.length ? (
                 <section className="space-y-3">
-                  <div>
-                    <h3 className="font-display text-sm font-semibold">Boys / girls split</h3>
-                    <p className="text-xs text-muted-foreground">
-                      {nf(classTotals.male)} boys · {nf(classTotals.female)} girls
-                      {hasOther ? ` · ${nf(classTotals.other)} other/unspecified` : ""} across {classRows.length} class sections
-                    </p>
-                  </div>
-
                   <div className="h-52 rounded-xl border bg-card p-3">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={classRows} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
