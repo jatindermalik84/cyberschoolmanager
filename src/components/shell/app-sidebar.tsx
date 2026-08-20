@@ -1,17 +1,18 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, ChevronRight, LayoutDashboard, Search, X } from "lucide-react";
+import { ArrowLeft, ChevronRight, LayoutDashboard, PanelLeftClose, PanelLeftOpen, Search, X } from "lucide-react";
 
 import {
-  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
-  SidebarRail,
+  SidebarRail, useSidebar,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
 import { type ModuleArea, type ModulePage } from "@/lib/module-catalogue";
+
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
@@ -29,8 +30,10 @@ function matchesQuery(label: string, query: string) {
 
 export function AppSidebar() {
   const { modules, school, roleLabel } = useWorkspace();
+  const { state, toggleSidebar } = useSidebar();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [query, setQuery] = useState("");
+
 
   const groups = GROUP_ORDER.map((group) => ({
     group,
@@ -277,6 +280,24 @@ export function AppSidebar() {
           </>
         )}
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-sidebar-border p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={toggleSidebar}
+              tooltip={state === "expanded" ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {state === "expanded" ? (
+                <PanelLeftClose className="size-4" />
+              ) : (
+                <PanelLeftOpen className="size-4" />
+              )}
+              <span>{state === "expanded" ? "Collapse sidebar" : "Expand sidebar"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>
