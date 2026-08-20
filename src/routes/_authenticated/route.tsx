@@ -32,7 +32,7 @@ function AuthenticatedLayout() {
   return (
     <Suspense fallback={<ShellSkeleton />}>
       <WorkspaceProvider>
-        <SidebarProvider defaultOpen={false}>
+        <SidebarProvider>
           <AppSidebar />
           <SidebarInset className="min-w-0">
             <TopBar />
