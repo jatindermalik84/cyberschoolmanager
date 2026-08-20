@@ -169,6 +169,59 @@ export type Database = {
           },
         ]
       }
+      dashboard_widget_overrides: {
+        Row: {
+          answers: string | null
+          created_at: string
+          hidden: boolean
+          id: string
+          label: string | null
+          module_key: string
+          note: string | null
+          reconcile: string | null
+          school_id: string
+          sort_order: number | null
+          updated_at: string
+          widget_id: string
+        }
+        Insert: {
+          answers?: string | null
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          label?: string | null
+          module_key: string
+          note?: string | null
+          reconcile?: string | null
+          school_id: string
+          sort_order?: number | null
+          updated_at?: string
+          widget_id: string
+        }
+        Update: {
+          answers?: string | null
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          label?: string | null
+          module_key?: string
+          note?: string | null
+          reconcile?: string | null
+          school_id?: string
+          sort_order?: number | null
+          updated_at?: string
+          widget_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dashboard_widget_overrides_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fee_collection_summary: {
         Row: {
           collected_amount: number

@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info, FileText } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info, FileText, SlidersHorizontal } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
@@ -15,6 +16,10 @@ import {
 } from "@/lib/dashboard-spec";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
+import { WidgetEditor } from "./widget-editor";
+import { applyOverrides, fetchWidgetOverrides, type OverrideMap } from "@/lib/widget-overrides";
+
+const EDITOR_ROLES = ["super_admin", "school_owner", "school_admin", "principal"];
 
 /* ------------------------------------------------------------------ atoms */
 
@@ -182,16 +187,26 @@ function Worklist({ list, data }: { list: WorklistSpec; data: DashData | undefin
 /* ------------------------------------------------------------------- page */
 
 export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
-  const { school } = useWorkspace();
+  const { school, roles } = useWorkspace();
+  const [editorOpen, setEditorOpen] = useState(false);
   const mod = MODULE_BY_KEY[moduleKey];
   const Icon = iconFor(mod?.icon ?? "");
-  const spec = dashboardSpecFor(moduleKey);
+  const baseSpec = dashboardSpecFor(moduleKey);
+  const canEdit = roles.some((r) => EDITOR_ROLES.includes(r));
 
   const { data, isPending } = useQuery({
     queryKey: ["dashboard", school?.id],
     queryFn: () => getDashboard({ data: { schoolId: school!.id } }),
     enabled: Boolean(school?.id),
   });
+
+  const { data: overrides } = useQuery({
+    queryKey: ["widget-overrides", school?.id, moduleKey],
+    queryFn: () => fetchWidgetOverrides(school!.id, moduleKey),
+    enabled: Boolean(school?.id),
+  });
+
+  const spec = applyOverrides(baseSpec, (overrides ?? {}) as OverrideMap);
 
   if (!mod) return <p className="text-sm text-muted-foreground">Unknown module.</p>;
 
@@ -244,7 +259,18 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
             </p>
           </div>
         </div>
-        {primaryAction ? (
+        <div className="flex items-center gap-2">
+          {canEdit && school ? (
+            <button
+              type="button"
+              onClick={() => setEditorOpen(true)}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border bg-card px-4 text-sm font-medium transition hover:border-primary/40 hover:bg-primary/5"
+            >
+              <SlidersHorizontal className="size-4" />
+              Edit widgets
+            </button>
+          ) : null}
+          {primaryAction ? (
           <Link
             to="/m/$module/$page"
             params={{ module: mod.key, page: primaryAction.pageKey }}
@@ -253,8 +279,21 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
             {primaryAction.label}
             <ArrowRight className="size-4" />
           </Link>
-        ) : null}
+          ) : null}
+        </div>
       </div>
+
+      {canEdit && school ? (
+        <WidgetEditor
+          open={editorOpen}
+          onOpenChange={setEditorOpen}
+          moduleKey={moduleKey}
+          moduleName={mod.name}
+          schoolId={school.id}
+          spec={baseSpec}
+          overrides={(overrides ?? {}) as OverrideMap}
+        />
+      ) : null}
 
       {/* Band A — KPI tiles */}
       {isPending && school ? (
