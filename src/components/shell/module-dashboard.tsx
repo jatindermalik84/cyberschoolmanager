@@ -221,7 +221,7 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
 
   const tiles: TileSpec[] = spec.tiles.length
     ? spec.tiles
-    : (["transaction", "setup", "report"] as ModuleArea[]).map((area) => ({
+    : (["setup", "transaction", "report"] as ModuleArea[]).map((area) => ({
         id: area,
         label: AREA_LABELS[area],
         answers: "Screens available in this module",
