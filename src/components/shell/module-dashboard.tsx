@@ -260,10 +260,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
               {mod.navGroup} · Module dashboard
             </p>
             <h1 className="font-display text-3xl font-bold tracking-tight">{mod.name}</h1>
-            <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-              {spec.serves}
-              {school ? ` · ${school.name}` : ""}
-            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
