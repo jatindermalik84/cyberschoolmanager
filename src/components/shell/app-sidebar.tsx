@@ -192,7 +192,13 @@ export function AppSidebar() {
                   <SidebarGroup className="p-0">
                     <SidebarGroupLabel asChild>
                       <CollapsibleTrigger className="group/label flex w-full cursor-pointer items-center justify-between px-2 py-1.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                        <span>{AREA_TITLES[area]}</span>
+                        <span className="flex items-center gap-2">
+                          {(() => {
+                            const Icon = AREA_ICONS[area];
+                            return <Icon className="size-4 text-sidebar-foreground/70" />;
+                          })()}
+                          {AREA_TITLES[area]}
+                        </span>
                         <ChevronRight className="size-4 shrink-0 text-sidebar-foreground/70 transition-transform duration-200 group-data-[state=open]/label:rotate-90" />
                       </CollapsibleTrigger>
                     </SidebarGroupLabel>
