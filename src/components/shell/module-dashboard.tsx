@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, Minus, Info } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
@@ -16,11 +16,11 @@ import {
 } from "@/lib/dashboard-spec";
 import { iconFor } from "./icon-map";
 import { useWorkspace } from "./workspace";
-import { WidgetEditor } from "./widget-editor";
+
 import { KpiDetailSheet } from "./kpi-detail";
 import { applyOverrides, fetchWidgetOverrides, type OverrideMap } from "@/lib/widget-overrides";
 
-const EDITOR_ROLES = ["super_admin", "school_owner", "school_admin", "principal"];
+
 
 /* ------------------------------------------------------------------ atoms */
 
@@ -196,12 +196,10 @@ function Worklist({ list, data }: { list: WorklistSpec; data: DashData | undefin
 
 export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
   const { school, roles } = useWorkspace();
-  const [editorOpen, setEditorOpen] = useState(false);
   const [activeTile, setActiveTile] = useState<TileSpec | null>(null);
   const mod = MODULE_BY_KEY[moduleKey];
   const Icon = iconFor(mod?.icon ?? "");
   const baseSpec = dashboardSpecFor(moduleKey);
-  const canEdit = roles.some((r) => EDITOR_ROLES.includes(r));
 
   const { data, isPending } = useQuery({
     queryKey: ["dashboard", school?.id],
@@ -269,16 +267,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {canEdit && school ? (
-            <button
-              type="button"
-              onClick={() => setEditorOpen(true)}
-              className="inline-flex h-10 items-center gap-2 rounded-lg border bg-card px-4 text-sm font-medium transition hover:border-primary/40 hover:bg-primary/5"
-            >
-              <SlidersHorizontal className="size-4" />
-              Edit widgets
-            </button>
-          ) : null}
           {primaryAction ? (
           <Link
             to="/m/$module/$page"
@@ -292,17 +280,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
         </div>
       </div>
 
-      {canEdit && school ? (
-        <WidgetEditor
-          open={editorOpen}
-          onOpenChange={setEditorOpen}
-          moduleKey={moduleKey}
-          moduleName={mod.name}
-          schoolId={school.id}
-          spec={baseSpec}
-          overrides={(overrides ?? {}) as OverrideMap}
-        />
-      ) : null}
 
       {/* Band A — KPI tiles */}
       {isPending && school ? (
