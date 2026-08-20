@@ -17,7 +17,7 @@ import { type ModuleArea, type ModulePage } from "@/lib/module-catalogue";
 
 const GROUP_ORDER = ["Academics", "Finance", "Operations", "People", "Communication", "Settings"];
 
-const AREA_ORDER: ModuleArea[] = ["transaction", "setup", "report"];
+const AREA_ORDER: ModuleArea[] = ["setup", "transaction", "report"];
 const AREA_TITLES: Record<ModuleArea, string> = {
   transaction: "Transactions",
   setup: "Master",
