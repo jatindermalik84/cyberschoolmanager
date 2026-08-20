@@ -8,7 +8,7 @@ import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { inr, STATUS_LABEL, type DashData, type TileSpec } from "@/lib/dashboard-spec";
+import { inr, type DashData, type TileSpec } from "@/lib/dashboard-spec";
 import type { ModulePage } from "@/lib/module-catalogue";
 
 type Row = { label: string; value: string; meta?: string };
@@ -144,32 +144,6 @@ export function KpiDetailSheet({
                 </p>
               ) : null}
 
-              <dl className="grid gap-3 rounded-xl border bg-muted/30 p-4 text-sm">
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">Question it answers</dt>
-                  <dd className="mt-0.5">{tile.answers}</dd>
-                </div>
-                {tile.reconcile ? (
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">Reconciles to</dt>
-                    <dd className="mt-0.5">{tile.reconcile}</dd>
-                  </div>
-                ) : null}
-                {tile.note ? (
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">Note</dt>
-                    <dd className="mt-0.5 text-muted-foreground">{tile.note}</dd>
-                  </div>
-                ) : null}
-                {tile.status !== "ready" ? (
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">Readiness</dt>
-                    <dd className="mt-0.5 text-muted-foreground">
-                      {STATUS_LABEL[tile.status]} — this figure is not being captured yet, so no live number is shown.
-                    </dd>
-                  </div>
-                ) : null}
-              </dl>
 
               {!showGender && breakdown && breakdown.rows.length ? (
                 <section className="space-y-3">
