@@ -30,8 +30,10 @@ function matchesQuery(label: string, query: string) {
 
 export function AppSidebar() {
   const { modules, school, roleLabel } = useWorkspace();
+  const { state, toggleSidebar } = useSidebar();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [query, setQuery] = useState("");
+
 
   const groups = GROUP_ORDER.map((group) => ({
     group,
@@ -278,6 +280,24 @@ export function AppSidebar() {
           </>
         )}
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-sidebar-border p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={toggleSidebar}
+              tooltip={state === "expanded" ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {state === "expanded" ? (
+                <PanelLeftClose className="size-4" />
+              ) : (
+                <PanelLeftOpen className="size-4" />
+              )}
+              <span>{state === "expanded" ? "Collapse sidebar" : "Expand sidebar"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>
