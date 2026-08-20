@@ -269,16 +269,6 @@ export function ModuleDashboard({ moduleKey }: { moduleKey: string }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {canEdit && school ? (
-            <button
-              type="button"
-              onClick={() => setEditorOpen(true)}
-              className="inline-flex h-10 items-center gap-2 rounded-lg border bg-card px-4 text-sm font-medium transition hover:border-primary/40 hover:bg-primary/5"
-            >
-              <SlidersHorizontal className="size-4" />
-              Edit widgets
-            </button>
-          ) : null}
           {primaryAction ? (
           <Link
             to="/m/$module/$page"
