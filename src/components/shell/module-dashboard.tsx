@@ -45,9 +45,9 @@ function NoteHint({ note }: { note: string }) {
     <TooltipProvider delayDuration={150}>
       <UiTooltip>
       <TooltipTrigger asChild>
-        <button type="button" aria-label="Why" className="text-muted-foreground/70 transition hover:text-foreground">
+        <span role="button" tabIndex={0} aria-label="Why" className="text-muted-foreground/70 transition hover:text-foreground">
           <Info className="size-3.5" />
-        </button>
+        </span>
       </TooltipTrigger>
         <TooltipContent className="max-w-xs text-xs leading-relaxed">{note}</TooltipContent>
       </UiTooltip>
