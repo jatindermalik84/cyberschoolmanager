@@ -30,7 +30,7 @@ function buildDrafts(spec: ModuleDashboardSpec, overrides: OverrideMap): Draft[]
   const tiles: Draft[] = spec.tiles.map((t, i) => {
     const o = overrides[t.id];
     return {
-      kind: "tile",
+      kind: "tile" as const,
       widget_id: t.id,
       label: o?.label ?? null,
       answers: o?.answers ?? null,
@@ -44,7 +44,7 @@ function buildDrafts(spec: ModuleDashboardSpec, overrides: OverrideMap): Draft[]
 
   const chartO = overrides["chart"];
   const chart: Draft = {
-    kind: "chart",
+    kind: "chart" as const,
     widget_id: "chart",
     label: chartO?.label ?? null,
     answers: chartO?.answers ?? null,
@@ -58,7 +58,7 @@ function buildDrafts(spec: ModuleDashboardSpec, overrides: OverrideMap): Draft[]
   const worklists: Draft[] = spec.worklists.map((w, i) => {
     const o = overrides[worklistWidgetId(w.id)];
     return {
-      kind: "worklist",
+      kind: "worklist" as const,
       widget_id: worklistWidgetId(w.id),
       label: o?.label ?? null,
       answers: null,
