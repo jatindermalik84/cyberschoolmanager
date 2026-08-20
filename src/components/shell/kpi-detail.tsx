@@ -205,7 +205,7 @@ export function KpiDetailSheet({
                     <h3 className="font-display text-sm font-semibold">Boys / girls split</h3>
                     <p className="text-xs text-muted-foreground">
                       {nf(genderTotals.male)} boys · {nf(genderTotals.female)} girls
-                      {hasOther ? ` · ${nf(genderTotals.other)} other/unspecified` : ""} across {genderRows.length} class sections
+                      {hasOther ? ` · ${nf(genderTotals.other)} other/unspecified` : ""} from student records across {genderRows.length} class sections
                     </p>
                   </div>
 
